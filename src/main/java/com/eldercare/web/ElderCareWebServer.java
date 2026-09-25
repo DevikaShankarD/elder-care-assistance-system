@@ -218,9 +218,23 @@ public class ElderCareWebServer {
 
                 } else if ("POST".equalsIgnoreCase(exchange.getRequestMethod())) {
                     Map<String, String> params = parseRequestBody(exchange);
+                    String name = params.getOrDefault("name", "").trim();
+                    String phone = params.getOrDefault("phone", "").trim();
+
+                    for (Elder existing : elderDAO.getAll()) {
+                        if (existing.getName() != null && existing.getName().trim().equalsIgnoreCase(name)) {
+                            sendResponse(exchange, 400, "{\"success\":false,\"error\":\"Username already exists! Please sign in or choose another username.\"}", "application/json");
+                            return;
+                        }
+                        if (existing.getPhone() != null && existing.getPhone().trim().equals(phone)) {
+                            sendResponse(exchange, 400, "{\"success\":false,\"error\":\"Phone number already exists!\"}", "application/json");
+                            return;
+                        }
+                    }
+
                     Elder elder = new Elder(0,
-                            params.get("name"),
-                            params.get("phone"),
+                            name,
+                            phone,
                             params.get("address"),
                             Integer.parseInt(params.get("age")),
                             params.get("gender"),
@@ -272,11 +286,25 @@ public class ElderCareWebServer {
 
                 } else if ("POST".equalsIgnoreCase(exchange.getRequestMethod())) {
                     Map<String, String> params = parseRequestBody(exchange);
+                    String name = params.getOrDefault("name", "").trim();
+                    String phone = params.getOrDefault("phone", "").trim();
+
+                    for (Doctor existing : doctorDAO.getAll()) {
+                        if (existing.getName() != null && existing.getName().trim().equalsIgnoreCase(name)) {
+                            sendResponse(exchange, 400, "{\"success\":false,\"error\":\"Username already exists! Please sign in or choose another username.\"}", "application/json");
+                            return;
+                        }
+                        if (existing.getPhone() != null && existing.getPhone().trim().equals(phone)) {
+                            sendResponse(exchange, 400, "{\"success\":false,\"error\":\"Phone number already exists!\"}", "application/json");
+                            return;
+                        }
+                    }
+
                     Doctor doctor = new Doctor(0,
-                            params.get("name"),
+                            name,
                             params.get("specialization"),
                             params.get("hospital"),
-                            params.get("phone"));
+                            phone);
                     int id = doctorDAO.add(doctor);
                     if (params.containsKey("password") && !params.get("password").isBlank()) {
                         try (java.sql.PreparedStatement ps = dbManager.getConnection().prepareStatement("UPDATE doctors SET password = ? WHERE id = ?")) {
@@ -323,9 +351,23 @@ public class ElderCareWebServer {
 
                 } else if ("POST".equalsIgnoreCase(exchange.getRequestMethod())) {
                     Map<String, String> params = parseRequestBody(exchange);
+                    String name = params.getOrDefault("name", "").trim();
+                    String phone = params.getOrDefault("phone", "").trim();
+
+                    for (Caregiver existing : caregiverDAO.getAll()) {
+                        if (existing.getName() != null && existing.getName().trim().equalsIgnoreCase(name)) {
+                            sendResponse(exchange, 400, "{\"success\":false,\"error\":\"Username already exists! Please sign in or choose another username.\"}", "application/json");
+                            return;
+                        }
+                        if (existing.getPhone() != null && existing.getPhone().trim().equals(phone)) {
+                            sendResponse(exchange, 400, "{\"success\":false,\"error\":\"Phone number already exists!\"}", "application/json");
+                            return;
+                        }
+                    }
+
                     Caregiver caregiver = new Caregiver(0,
-                            params.get("name"),
-                            params.get("phone"),
+                            name,
+                            phone,
                             params.get("address"),
                             params.get("relationship"));
                     int id = caregiverDAO.add(caregiver);

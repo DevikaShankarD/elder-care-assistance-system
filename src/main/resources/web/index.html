@@ -1661,6 +1661,9 @@
 
         async function handleElderSignUp(e) {
             e.preventDefault();
+            const alertBox = document.getElementById('loginAlert');
+            alertBox.style.display = 'none';
+
             const payload = {
                 name: document.getElementById('suElderName').value.trim(),
                 password: document.getElementById('suElderPassword').value.trim(),
@@ -1679,23 +1682,28 @@
                     body: JSON.stringify(payload)
                 });
 
-                if (res.ok) {
-                    const data = await res.json();
+                const data = await res.json();
+                if (res.ok && data.success) {
                     await loadEldersList();
                     currentUser = { role: 'ELDER', id: data.id, name: payload.name };
                     currentElderId = data.id;
                     sessionStorage.setItem('eldercare_user', JSON.stringify(currentUser));
                     showElderView();
                 } else {
-                    alert('Failed to register elder profile. Phone number may already be in use.');
+                    alertBox.innerText = data.error || 'Username already exists!';
+                    alertBox.style.display = 'block';
                 }
             } catch (err) {
-                alert('Connection error during elder registration.');
+                alertBox.innerText = 'Connection error during elder registration.';
+                alertBox.style.display = 'block';
             }
         }
 
         async function handleDoctorSignUp(e) {
             e.preventDefault();
+            const alertBox = document.getElementById('loginAlert');
+            alertBox.style.display = 'none';
+
             const payload = {
                 name: document.getElementById('suDocName').value.trim(),
                 password: document.getElementById('suDocPassword').value.trim(),
@@ -1711,22 +1719,27 @@
                     body: JSON.stringify(payload)
                 });
 
-                if (res.ok) {
-                    const data = await res.json();
+                const data = await res.json();
+                if (res.ok && data.success) {
                     await loadDoctorsList();
                     currentUser = { role: 'DOCTOR', id: data.id, name: payload.name, details: { ...payload, id: data.id } };
                     sessionStorage.setItem('eldercare_user', JSON.stringify(currentUser));
                     showDoctorView();
                 } else {
-                    alert('Failed to register doctor profile.');
+                    alertBox.innerText = data.error || 'Username already exists!';
+                    alertBox.style.display = 'block';
                 }
             } catch (err) {
-                alert('Connection error during doctor registration.');
+                alertBox.innerText = 'Connection error during doctor registration.';
+                alertBox.style.display = 'block';
             }
         }
 
         async function handleCaregiverSignUp(e) {
             e.preventDefault();
+            const alertBox = document.getElementById('loginAlert');
+            alertBox.style.display = 'none';
+
             const payload = {
                 name: document.getElementById('suCareName').value.trim(),
                 password: document.getElementById('suCarePassword').value.trim(),
@@ -1742,17 +1755,19 @@
                     body: JSON.stringify(payload)
                 });
 
-                if (res.ok) {
-                    const data = await res.json();
+                const data = await res.json();
+                if (res.ok && data.success) {
                     await loadCaregiversList();
                     currentUser = { role: 'CAREGIVER', id: data.id, name: payload.name, details: { ...payload, id: data.id } };
                     sessionStorage.setItem('eldercare_user', JSON.stringify(currentUser));
                     showCaregiverView();
                 } else {
-                    alert('Failed to register caregiver profile.');
+                    alertBox.innerText = data.error || 'Username already exists!';
+                    alertBox.style.display = 'block';
                 }
             } catch (err) {
-                alert('Connection error during caregiver registration.');
+                alertBox.innerText = 'Connection error during caregiver registration.';
+                alertBox.style.display = 'block';
             }
         }
 
@@ -2535,11 +2550,14 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-            if (res.ok) {
+            const data = await res.json();
+            if (res.ok && data.success) {
                 closeModal('elderModal');
                 await loadEldersList();
                 loadAdminOverview();
                 alert('Elder registered successfully!');
+            } else {
+                alert(data.error || 'Username already exists!');
             }
         }
 
@@ -2556,11 +2574,14 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-            if (res.ok) {
+            const data = await res.json();
+            if (res.ok && data.success) {
                 closeModal('doctorModal');
                 await loadDoctorsList();
                 loadAdminOverview();
                 alert('Doctor added successfully!');
+            } else {
+                alert(data.error || 'Username already exists!');
             }
         }
 
@@ -2577,11 +2598,14 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-            if (res.ok) {
+            const data = await res.json();
+            if (res.ok && data.success) {
                 closeModal('caregiverModal');
                 await loadCaregiversList();
                 loadAdminOverview();
                 alert('Caregiver added successfully!');
+            } else {
+                alert(data.error || 'Username already exists!');
             }
         }
 
