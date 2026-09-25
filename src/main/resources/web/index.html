@@ -518,12 +518,12 @@
             <!-- 1. UNIFIED SIGN IN FORM (Username + Password for selected role) -->
             <form id="formSignIn" onsubmit="handleSignIn(event)">
                 <div class="form-group">
-                    <label id="signInUserLabel" for="loginUsername">Username (Full Name or Phone):</label>
-                    <input type="text" id="loginUsername" placeholder="Enter your name or phone number" required>
+                    <label id="signInUserLabel" for="loginUsername">Username:</label>
+                    <input type="text" id="loginUsername" required>
                 </div>
                 <div class="form-group">
                     <label for="loginPassword">Password:</label>
-                    <input type="password" id="loginPassword" placeholder="Enter password" required>
+                    <input type="password" id="loginPassword" required>
                     <div id="signInHelpText" class="form-help"></div>
                 </div>
                 <button id="signInSubmitBtn" type="submit" class="btn btn-success" style="width:100%; padding:9px; font-weight:bold;">
@@ -535,16 +535,16 @@
             <form id="formElderSignUp" onsubmit="handleElderSignUp(event)" style="display:none;">
                 <div class="form-group">
                     <label>Full Name (Username):</label>
-                    <input type="text" id="suElderName" required placeholder="e.g. John Smith">
+                    <input type="text" id="suElderName" required>
                 </div>
                 <div class="form-group">
                     <label>Create Password:</label>
-                    <input type="password" id="suElderPassword" required placeholder="Enter a password">
+                    <input type="password" id="suElderPassword" required>
                 </div>
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
                     <div class="form-group">
                         <label>Age:</label>
-                        <input type="number" id="suElderAge" min="50" max="120" value="70" required>
+                        <input type="number" id="suElderAge" min="50" max="120" required>
                     </div>
                     <div class="form-group">
                         <label>Gender:</label>
@@ -571,16 +571,16 @@
                     </div>
                     <div class="form-group">
                         <label>Phone Number:</label>
-                        <input type="tel" id="suElderPhone" pattern="[0-9]{10}" placeholder="10-digit mobile" required>
+                        <input type="tel" id="suElderPhone" pattern="[0-9]{10}" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label>Address:</label>
-                    <input type="text" id="suElderAddress" placeholder="e.g. 14 Rosewood Lane">
+                    <input type="text" id="suElderAddress">
                 </div>
                 <div class="form-group">
                     <label>Medical Conditions:</label>
-                    <input type="text" id="suElderConditions" placeholder="e.g. Hypertension, Diabetes">
+                    <input type="text" id="suElderConditions">
                 </div>
                 <button type="submit" class="btn btn-success" style="width:100%; padding:9px; font-weight:bold;">
                     Sign Up & Enter Elder Dashboard
@@ -591,23 +591,23 @@
             <form id="formDoctorSignUp" onsubmit="handleDoctorSignUp(event)" style="display:none;">
                 <div class="form-group">
                     <label>Doctor Name (Username):</label>
-                    <input type="text" id="suDocName" required placeholder="e.g. Dr. James Anderson">
+                    <input type="text" id="suDocName" required>
                 </div>
                 <div class="form-group">
                     <label>Create Password:</label>
-                    <input type="password" id="suDocPassword" required placeholder="Enter a password">
+                    <input type="password" id="suDocPassword" required>
                 </div>
                 <div class="form-group">
                     <label>Specialization:</label>
-                    <input type="text" id="suDocSpec" required placeholder="e.g. Cardiology / General Medicine">
+                    <input type="text" id="suDocSpec" required>
                 </div>
                 <div class="form-group">
                     <label>Hospital / Clinic:</label>
-                    <input type="text" id="suDocHosp" required placeholder="e.g. City General Hospital">
+                    <input type="text" id="suDocHosp" required>
                 </div>
                 <div class="form-group">
                     <label>Phone Number:</label>
-                    <input type="tel" id="suDocPhone" pattern="[0-9]{10}" placeholder="10-digit mobile" required>
+                    <input type="tel" id="suDocPhone" pattern="[0-9]{10}" required>
                 </div>
                 <button type="submit" class="btn" style="width:100%; padding:9px; font-weight:bold;">
                     Sign Up & Enter Doctor Portal
@@ -618,23 +618,23 @@
             <form id="formCaregiverSignUp" onsubmit="handleCaregiverSignUp(event)" style="display:none;">
                 <div class="form-group">
                     <label>Caregiver Name (Username):</label>
-                    <input type="text" id="suCareName" required placeholder="e.g. Sarah Wilson">
+                    <input type="text" id="suCareName" required>
                 </div>
                 <div class="form-group">
                     <label>Create Password:</label>
-                    <input type="password" id="suCarePassword" required placeholder="Enter a password">
+                    <input type="password" id="suCarePassword" required>
                 </div>
                 <div class="form-group">
                     <label>Phone Number:</label>
-                    <input type="tel" id="suCarePhone" pattern="[0-9]{10}" placeholder="10-digit mobile" required>
+                    <input type="tel" id="suCarePhone" pattern="[0-9]{10}" required>
                 </div>
                 <div class="form-group">
                     <label>Address:</label>
-                    <input type="text" id="suCareAddress" placeholder="e.g. City Center">
+                    <input type="text" id="suCareAddress">
                 </div>
                 <div class="form-group">
                     <label>Role / Relationship to Elder:</label>
-                    <input type="text" id="suCareRel" required placeholder="e.g. Nurse / Family Caregiver">
+                    <input type="text" id="suCareRel" required>
                 </div>
                 <button type="submit" class="btn" style="background:#8250df; width:100%; padding:9px; font-weight:bold;">
                     Sign Up & Enter Caregiver Portal
@@ -1266,12 +1266,12 @@
             <form onsubmit="submitNewElder(event)">
                 <div class="form-group">
                     <label>Full Name:</label>
-                    <input type="text" id="neName" required placeholder="e.g. Ramesh Kumar">
+                    <input type="text" id="neName" required>
                 </div>
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
                     <div class="form-group">
                         <label>Age:</label>
-                        <input type="number" id="neAge" min="50" max="120" value="72" required>
+                        <input type="number" id="neAge" min="50" max="120" required>
                     </div>
                     <div class="form-group">
                         <label>Gender:</label>
@@ -1298,16 +1298,16 @@
                     </div>
                     <div class="form-group">
                         <label>Phone Number (10 digits):</label>
-                        <input type="tel" id="nePhone" pattern="[0-9]{10}" placeholder="9876543210" required>
+                        <input type="tel" id="nePhone" pattern="[0-9]{10}" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label>Address:</label>
-                    <input type="text" id="neAddress" placeholder="e.g. 14 Elm Street, City Center">
+                    <input type="text" id="neAddress">
                 </div>
                 <div class="form-group">
                     <label>Medical Conditions:</label>
-                    <input type="text" id="neConditions" placeholder="e.g. Hypertension, Arthritis">
+                    <input type="text" id="neConditions">
                 </div>
                 <div class="modal-buttons">
                     <button type="button" class="btn btn-secondary" onclick="closeModal('elderModal')">Cancel</button>
@@ -1324,19 +1324,19 @@
             <form onsubmit="submitNewDoctor(event)">
                 <div class="form-group">
                     <label>Doctor Name:</label>
-                    <input type="text" id="ndName" required placeholder="e.g. Dr. Robert Wilson">
+                    <input type="text" id="ndName" required>
                 </div>
                 <div class="form-group">
                     <label>Specialization:</label>
-                    <input type="text" id="ndSpec" required placeholder="e.g. Cardiology / General Medicine">
+                    <input type="text" id="ndSpec" required>
                 </div>
                 <div class="form-group">
                     <label>Hospital / Clinic:</label>
-                    <input type="text" id="ndHosp" required placeholder="e.g. City General Hospital">
+                    <input type="text" id="ndHosp" required>
                 </div>
                 <div class="form-group">
                     <label>Phone Number (10 digits):</label>
-                    <input type="tel" id="ndPhone" pattern="[0-9]{10}" placeholder="9845112233" required>
+                    <input type="tel" id="ndPhone" pattern="[0-9]{10}" required>
                 </div>
                 <div class="modal-buttons">
                     <button type="button" class="btn btn-secondary" onclick="closeModal('doctorModal')">Cancel</button>
@@ -1353,19 +1353,19 @@
             <form onsubmit="submitNewCaregiver(event)">
                 <div class="form-group">
                     <label>Caregiver Name:</label>
-                    <input type="text" id="ncName" required placeholder="e.g. Sarah Wilson">
+                    <input type="text" id="ncName" required>
                 </div>
                 <div class="form-group">
                     <label>Phone Number (10 digits):</label>
-                    <input type="tel" id="ncPhone" pattern="[0-9]{10}" placeholder="9899988877" required>
+                    <input type="tel" id="ncPhone" pattern="[0-9]{10}" required>
                 </div>
                 <div class="form-group">
                     <label>Address:</label>
-                    <input type="text" id="ncAddress" placeholder="e.g. 8 Oak Lane, City Center">
+                    <input type="text" id="ncAddress">
                 </div>
                 <div class="form-group">
                     <label>Relationship / Role:</label>
-                    <input type="text" id="ncRel" required placeholder="e.g. Certified Caregiver / Nurse">
+                    <input type="text" id="ncRel" required>
                 </div>
                 <div class="modal-buttons">
                     <button type="button" class="btn btn-secondary" onclick="closeModal('caregiverModal')">Cancel</button>
@@ -1428,7 +1428,7 @@
 
                 <div class="form-group">
                     <label>Notes / Activity:</label>
-                    <input type="text" id="readingNotes" value="Routine measurement">
+                    <input type="text" id="readingNotes">
                 </div>
 
                 <div class="modal-buttons">
@@ -1455,7 +1455,7 @@
                 </div>
                 <div class="form-group">
                     <label>Purpose / Symptoms:</label>
-                    <input type="text" id="apptPurpose" value="Routine Health Checkup" required>
+                    <input type="text" id="apptPurpose" required>
                 </div>
                 <div class="modal-buttons">
                     <button type="button" class="btn btn-secondary" onclick="closeModal('apptModal')">Cancel</button>
@@ -1571,31 +1571,29 @@
 
             if (currentAuthMode === 'signin') {
                 document.getElementById('formSignIn').style.display = 'block';
+                userInput.placeholder = '';
+                passInput.placeholder = '';
 
                 if (currentRole === 'elder') {
-                    userLabel.innerText = 'Elder Username (Full Name or Phone):';
-                    userInput.placeholder = 'Enter your name or 10-digit mobile';
+                    userLabel.innerText = 'Username:';
                     helpText.innerHTML = '';
                     submitBtn.innerText = 'Sign In to Elder Dashboard';
                     submitBtn.className = 'btn btn-success';
                     submitBtn.style.background = '';
                 } else if (currentRole === 'doctor') {
-                    userLabel.innerText = 'Doctor Username (Full Name or Phone):';
-                    userInput.placeholder = 'Enter your name or 10-digit mobile';
+                    userLabel.innerText = 'Username:';
                     helpText.innerHTML = '';
                     submitBtn.innerText = 'Sign In to Doctor Clinical Portal';
                     submitBtn.className = 'btn';
                     submitBtn.style.background = '#0969da';
                 } else if (currentRole === 'caregiver') {
-                    userLabel.innerText = 'Caregiver Username (Full Name or Phone):';
-                    userInput.placeholder = 'Enter your name or 10-digit mobile';
+                    userLabel.innerText = 'Username:';
                     helpText.innerHTML = '';
                     submitBtn.innerText = 'Sign In to Caregiver Portal';
                     submitBtn.className = 'btn';
                     submitBtn.style.background = '#8250df';
                 } else if (currentRole === 'admin') {
-                    userLabel.innerText = 'Administrator Username:';
-                    userInput.placeholder = 'Enter admin username';
+                    userLabel.innerText = 'Username:';
                     helpText.innerHTML = '';
                     submitBtn.innerText = 'Sign In as Administrator';
                     submitBtn.className = 'btn';
