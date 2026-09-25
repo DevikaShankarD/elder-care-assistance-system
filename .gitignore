@@ -18,8 +18,8 @@ release.properties
 *.tar.gz
 *.rar
 
-# SQLite Database (auto-generated on app startup)
-*.db
+# SQLite Database
+test_eldercare.db
 *.db-journal
 
 # Logs

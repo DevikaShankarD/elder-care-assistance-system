@@ -81,7 +81,7 @@ public class ElderCareWebServer {
      * @throws IOException on network binding error
      */
     public void start() throws IOException {
-        server = HttpServer.create(new InetSocketAddress(port), 0);
+        server = HttpServer.create(new InetSocketAddress("0.0.0.0", port), 0);
 
         // Static files (Web Dashboard)
         server.createContext("/", new StaticFileHandler());
@@ -119,21 +119,30 @@ public class ElderCareWebServer {
     }
 
     public static void main(String[] args) {
+        int port = DEFAULT_PORT;
+        String envPort = System.getenv("PORT");
+        if (envPort != null && !envPort.trim().isEmpty()) {
+            try {
+                port = Integer.parseInt(envPort.trim());
+            } catch (NumberFormatException ignored) {
+            }
+        }
+
         try {
-            ElderCareWebServer webServer = new ElderCareWebServer(DEFAULT_PORT);
+            ElderCareWebServer webServer = new ElderCareWebServer(port);
             webServer.start();
 
             // Try opening default browser on Windows
             try {
                 if (System.getProperty("os.name").toLowerCase().contains("win")) {
-                    Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler http://localhost:" + DEFAULT_PORT);
+                    Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler http://localhost:" + port);
                 }
             } catch (Exception ignored) {
             }
 
             System.out.println("Press Ctrl+C in this terminal to shut down the web server.");
         } catch (IOException e) {
-            System.err.println("[ERROR] Failed to start web server on port " + DEFAULT_PORT + ": " + e.getMessage());
+            System.err.println("[ERROR] Failed to start web server on port " + port + ": " + e.getMessage());
         }
     }
 
