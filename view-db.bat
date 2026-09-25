@@ -4,5 +4,5 @@ cd /d "%~dp0"
 echo ====================================================================
 echo   Inspecting SQLite Database (eldercare.db)...
 echo ====================================================================
-call mvnw.bat exec:java -Pdb
+call mvnw.bat compile exec:java -Pdb
 pause

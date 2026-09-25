@@ -4,5 +4,5 @@ cd /d "%~dp0"
 echo ===================================================
 echo     Starting Elder Care Assistance System...
 echo ===================================================
-call mvnw.bat exec:java
+call mvnw.bat compile exec:java
 pause
