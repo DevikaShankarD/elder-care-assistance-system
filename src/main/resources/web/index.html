@@ -1,0 +1,1845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elder Care Assistance System</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f7f9fa;
+            color: #222;
+            margin: 0;
+            padding: 0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Top Header */
+        .navbar {
+            background-color: #1e3a5f;
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-brand h1 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .role-badge {
+            font-size: 11px;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 3px;
+            text-transform: uppercase;
+        }
+
+        .badge-admin { background-color: #e36209; color: white; }
+        .badge-elder { background-color: #2da44e; color: white; }
+
+        .navbar-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-controls select {
+            padding: 5px 8px;
+            font-size: 13px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        /* Buttons */
+        .btn {
+            background-color: #0969da;
+            color: white;
+            border: 1px solid transparent;
+            padding: 6px 12px;
+            font-size: 13px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover { background-color: #0856b3; }
+
+        .btn-secondary {
+            background-color: #eaeef2;
+            color: #24292f;
+            border: 1px solid #d0d7de;
+        }
+
+        .btn-secondary:hover { background-color: #dbe0e5; }
+
+        .btn-success { background-color: #2da44e; color: white; }
+        .btn-success:hover { background-color: #2c974b; }
+
+        .btn-danger { background-color: #cf222e; color: white; }
+        .btn-danger:hover { background-color: #b31d28; }
+
+        .btn-sm {
+            padding: 3px 8px;
+            font-size: 12px;
+        }
+
+        .btn-sos {
+            background-color: #c92a2a;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .btn-sos:hover { background-color: #a61e1e; }
+
+        /* Container */
+        .container {
+            max-width: 1080px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        /* Card / Section Box */
+        .card {
+            background: white;
+            border: 1px solid #d0d7de;
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eaeef2;
+            padding-bottom: 10px;
+            margin-bottom: 14px;
+        }
+
+        .card-header h2, .card-header h3 {
+            margin: 0;
+            font-size: 16px;
+            color: #1e3a5f;
+        }
+
+        /* Login Screen */
+        .login-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: white;
+            border: 1px solid #d0d7de;
+            border-radius: 6px;
+            width: 440px;
+            max-width: 100%;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .login-header {
+            text-align: center;
+            border-bottom: 1px solid #eaeef2;
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+        }
+
+        .login-header h2 {
+            margin: 0 0 6px 0;
+            color: #1e3a5f;
+            font-size: 20px;
+        }
+
+        .login-header p {
+            margin: 0;
+            color: #666;
+            font-size: 13px;
+        }
+
+        .login-tabs {
+            display: flex;
+            border-bottom: 2px solid #e1e4e8;
+            margin-bottom: 18px;
+        }
+
+        .login-tab-btn {
+            flex: 1;
+            padding: 8px 12px;
+            text-align: center;
+            background: none;
+            border: none;
+            font-size: 13px;
+            font-weight: bold;
+            color: #586069;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .login-tab-btn.active {
+            color: #0969da;
+            border-bottom-color: #0969da;
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 7px 10px;
+            font-size: 13px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .form-help {
+            font-size: 11px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th {
+            background-color: #f6f8fa;
+            color: #57606a;
+            text-align: left;
+            padding: 8px 10px;
+            border-bottom: 1px solid #d0d7de;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #eaeef2;
+            vertical-align: middle;
+        }
+
+        tr:hover td {
+            background-color: #fafbfc;
+        }
+
+        /* Status tags */
+        .tag {
+            display: inline-block;
+            padding: 2px 6px;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 3px;
+        }
+        .tag-normal { background-color: #dafbe1; color: #1a7f37; }
+        .tag-elevated { background-color: #fff8c5; color: #9a6700; }
+        .tag-high { background-color: #ffebe9; color: #cf222e; }
+        .tag-low { background-color: #ddf4ff; color: #0969da; }
+        .tag-critical { background-color: #cf222e; color: white; }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 800px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .stat-box {
+            background: white;
+            border: 1px solid #d0d7de;
+            border-radius: 6px;
+            padding: 14px;
+        }
+
+        .stat-title {
+            font-size: 12px;
+            color: #656d76;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 22px;
+            font-weight: bold;
+            color: #24292f;
+            margin-bottom: 4px;
+        }
+
+        .stat-extra {
+            font-size: 12px;
+            color: #57606a;
+            border-top: 1px solid #f0f2f5;
+            padding-top: 6px;
+        }
+
+        /* Admin Nav Tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 6px;
+            border-bottom: 1px solid #d0d7de;
+            margin-bottom: 16px;
+        }
+
+        .nav-tab-btn {
+            background: #f6f8fa;
+            border: 1px solid #d0d7de;
+            border-bottom: none;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #57606a;
+            border-radius: 5px 5px 0 0;
+            cursor: pointer;
+            margin-bottom: -1px;
+        }
+
+        .nav-tab-btn.active {
+            background: white;
+            color: #1e3a5f;
+            border-top: 2px solid #0969da;
+            border-bottom: 1px solid white;
+        }
+
+        /* Profile banner */
+        .profile-banner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .profile-banner h2 {
+            margin: 0 0 5px 0;
+            font-size: 20px;
+            color: #1e3a5f;
+        }
+
+        .profile-info {
+            font-size: 13px;
+            color: #444;
+        }
+
+        .profile-info span {
+            margin-right: 15px;
+        }
+
+        /* Modals */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-box {
+            background: white;
+            border-radius: 6px;
+            width: 480px;
+            max-width: 92%;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .modal-box h3 {
+            margin-top: 0;
+            margin-bottom: 14px;
+            font-size: 16px;
+            color: #1e3a5f;
+            border-bottom: 1px solid #eaeef2;
+            padding-bottom: 8px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        pre.report-area {
+            background: #f6f8fa;
+            border: 1px solid #d0d7de;
+            border-radius: 4px;
+            padding: 12px;
+            font-family: Consolas, monospace;
+            font-size: 12px;
+            color: #24292f;
+            white-space: pre;
+            overflow-x: auto;
+            max-height: 350px;
+        }
+
+        .alert-bar {
+            padding: 10px 14px;
+            border-radius: 4px;
+            margin-bottom: 14px;
+            font-size: 13px;
+            display: none;
+        }
+        .alert-bar-success { background: #dafbe1; color: #1a7f37; border: 1px solid #b4f1c1; }
+        .alert-bar-danger { background: #ffebe9; color: #cf222e; border: 1px solid #ffc1ba; }
+    </style>
+</head>
+<body>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 1: LOGIN SCREEN                                                      -->
+    <!-- ========================================================================= -->
+    <div id="viewLogin" class="login-wrapper">
+        <div class="login-card">
+            <div class="login-header">
+                <h2>Elder Care Assistance System</h2>
+                <p>Course Project &bull; Integrated Elderly Assistance Platform</p>
+            </div>
+
+            <!-- Login Tabs -->
+            <div class="login-tabs">
+                <button id="tabBtnElder" class="login-tab-btn active" onclick="switchLoginTab('elder')">Elder / Family</button>
+                <button id="tabBtnAdmin" class="login-tab-btn" onclick="switchLoginTab('admin')">Administrator</button>
+            </div>
+
+            <div id="loginAlert" class="alert-bar alert-bar-danger"></div>
+
+            <!-- Elder Login Form -->
+            <form id="formLoginElder" onsubmit="handleElderLogin(event)">
+                <div class="form-group">
+                    <label for="loginElderSelect">Select Elder Profile:</label>
+                    <select id="loginElderSelect" required>
+                        <option value="">Loading elders...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="elderPin">Access PIN:</label>
+                    <input type="password" id="elderPin" value="1234" required>
+                    <div class="form-help">Default demo PIN: <strong>1234</strong></div>
+                </div>
+                <button type="submit" class="btn btn-success" style="width:100%; padding:9px; font-weight:bold;">
+                    Sign In to Elder Dashboard
+                </button>
+            </form>
+
+            <!-- Admin Login Form -->
+            <form id="formLoginAdmin" onsubmit="handleAdminLogin(event)" style="display:none;">
+                <div class="form-group">
+                    <label for="adminUsername">Username:</label>
+                    <input type="text" id="adminUsername" value="admin" required>
+                </div>
+                <div class="form-group">
+                    <label for="adminPassword">Password:</label>
+                    <input type="password" id="adminPassword" value="admin" required>
+                    <div class="form-help">Default demo credentials: <strong>admin</strong> / <strong>admin</strong></div>
+                </div>
+                <button type="submit" class="btn" style="width:100%; padding:9px; font-weight:bold;">
+                    Sign In as Administrator
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- TOP NAVIGATION BAR (For Logged In Views)                                   -->
+    <!-- ========================================================================= -->
+    <div id="topNavbar" class="navbar" style="display:none;">
+        <div class="navbar-brand">
+            <h1>Elder Care System</h1>
+            <span id="navRoleBadge" class="role-badge badge-elder">Elder View</span>
+        </div>
+
+        <div class="navbar-controls">
+            <!-- Elder view controls -->
+            <div id="elderNavControls" style="display:flex; align-items:center; gap:8px;">
+                <label for="navElderSelect" style="font-size:12px; color:#ddd;">Elder:</label>
+                <select id="navElderSelect" onchange="switchElder(this.value)">
+                    <!-- Loaded dynamically -->
+                </select>
+                <button class="btn-sos" onclick="openModal('sosModal')">EMERGENCY SOS</button>
+            </div>
+
+            <!-- Admin quick switch -->
+            <button id="btnSwitchToAdmin" class="btn btn-secondary btn-sm" style="display:none;" onclick="showAdminView()">
+                Admin Portal
+            </button>
+            <button id="btnSwitchToElder" class="btn btn-secondary btn-sm" style="display:none;" onclick="showElderView()">
+                Elder View
+            </button>
+
+            <span id="navUserLabel" style="font-size:13px; color:#eee; margin: 0 4px;">User</span>
+            <button class="btn btn-secondary btn-sm" onclick="logout()">Log Out</button>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 2: ADMIN MANAGEMENT PORTAL                                           -->
+    <!-- ========================================================================= -->
+    <div id="viewAdmin" class="container" style="display:none;">
+        <!-- Admin KPI Stats -->
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-title">Registered Elders</div>
+                <div class="stat-value" id="kpiElders">0</div>
+                <div class="stat-extra">Active profiles in database</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-title">Doctors On Call</div>
+                <div class="stat-value" id="kpiDoctors">0</div>
+                <div class="stat-extra">Registered specialists</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-title">Caregivers</div>
+                <div class="stat-value" id="kpiCaregivers">0</div>
+                <div class="stat-extra">Assigned caregivers</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-title">Emergency Alerts</div>
+                <div class="stat-value" id="kpiAlerts">0</div>
+                <div class="stat-extra">Total SOS events logged</div>
+            </div>
+        </div>
+
+        <!-- Admin Navigation Tabs -->
+        <div class="nav-tabs">
+            <button class="nav-tab-btn active" onclick="switchAdminTab('elders')">Manage Elders</button>
+            <button class="nav-tab-btn" onclick="switchAdminTab('doctors')">Manage Doctors</button>
+            <button class="nav-tab-btn" onclick="switchAdminTab('caregivers')">Manage Caregivers</button>
+            <button class="nav-tab-btn" onclick="switchAdminTab('alerts')">Emergency Alerts Log</button>
+            <button class="nav-tab-btn" onclick="switchAdminTab('appts')">All Appointments</button>
+        </div>
+
+        <!-- Tab 1: Elders -->
+        <div id="adminTabElders" class="card">
+            <div class="card-header">
+                <h3>Registered Elders Directory</h3>
+                <button class="btn btn-success" onclick="openModal('elderModal')">+ Register New Elder</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:40px;">ID</th>
+                        <th>Name</th>
+                        <th>Age / Gender</th>
+                        <th>Blood Group</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>Medical Conditions</th>
+                        <th style="text-align:right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="adminEldersTableBody">
+                    <tr><td colspan="8" style="text-align:center;">Loading elders...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Tab 2: Doctors -->
+        <div id="adminTabDoctors" class="card" style="display:none;">
+            <div class="card-header">
+                <h3>Doctor Directory</h3>
+                <button class="btn btn-success" onclick="openModal('doctorModal')">+ Add Doctor</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:40px;">ID</th>
+                        <th>Doctor Name</th>
+                        <th>Specialization</th>
+                        <th>Hospital / Clinic</th>
+                        <th>Phone</th>
+                        <th style="text-align:right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="adminDoctorsTableBody">
+                    <tr><td colspan="6" style="text-align:center;">Loading doctors...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Tab 3: Caregivers -->
+        <div id="adminTabCaregivers" class="card" style="display:none;">
+            <div class="card-header">
+                <h3>Caregiver Directory</h3>
+                <button class="btn btn-success" onclick="openModal('caregiverModal')">+ Add Caregiver</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:40px;">ID</th>
+                        <th>Caregiver Name</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>Role / Relationship</th>
+                        <th style="text-align:right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="adminCaregiversTableBody">
+                    <tr><td colspan="6" style="text-align:center;">Loading caregivers...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Tab 4: Emergency Alerts Log -->
+        <div id="adminTabAlerts" class="card" style="display:none;">
+            <div class="card-header">
+                <h3>System Emergency SOS Alerts Log</h3>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:50px;">ID</th>
+                        <th>Date & Time</th>
+                        <th>Elder Name</th>
+                        <th>Reason</th>
+                        <th>Contacts & Doctors Notified</th>
+                    </tr>
+                </thead>
+                <tbody id="adminAlertsTableBody">
+                    <tr><td colspan="5" style="text-align:center;">Loading alerts...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Tab 5: All Appointments -->
+        <div id="adminTabAppts" class="card" style="display:none;">
+            <div class="card-header">
+                <h3>All Doctor Appointments</h3>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:50px;">ID</th>
+                        <th>Date & Time</th>
+                        <th>Elder Name</th>
+                        <th>Doctor</th>
+                        <th>Hospital</th>
+                        <th>Purpose</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="adminApptsTableBody">
+                    <tr><td colspan="7" style="text-align:center;">Loading appointments...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Maintenance Card -->
+        <div class="card" style="background:#fffdfa; border-color:#fae2c2;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <strong style="color:#b05a00;">System Sample Data Maintenance:</strong>
+                    <span style="font-size:13px; color:#666; margin-left:8px;">Reset database to clean standard student sample data (John Smith, Mary Davis, standard doctors).</span>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="resetSampleData()">Reset Sample Data</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 3: ELDER / PATIENT ASSISTANCE DASHBOARD                              -->
+    <!-- ========================================================================= -->
+    <div id="viewElder" class="container" style="display:none;">
+        <!-- Elder Profile Header Card -->
+        <div class="card profile-banner">
+            <div>
+                <h2 id="pName">Loading Elder Profile...</h2>
+                <div class="profile-info">
+                    <span id="pAgeGender">Age: --</span>
+                    <span id="pBlood">Blood: --</span>
+                    <span id="pPhone">Phone: --</span>
+                    <span id="pConditions">Conditions: --</span>
+                </div>
+            </div>
+            <div style="display:flex; gap:8px;">
+                <button class="btn" onclick="openModal('readingModal')">+ Add Reading</button>
+                <button class="btn" onclick="openModal('apptModal')">+ Book Appointment</button>
+            </div>
+        </div>
+
+        <!-- 4 Vital Stat Boxes -->
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-title">Blood Pressure</div>
+                <div class="stat-value" id="valBp">--/--</div>
+                <div class="stat-extra">
+                    <span id="tagBp" class="tag tag-normal">--</span>
+                    <div style="margin-top:4px;" id="avgBp">7-Day: -- | Trend: --</div>
+                </div>
+            </div>
+
+            <div class="stat-box">
+                <div class="stat-title">Blood Sugar</div>
+                <div class="stat-value" id="valSugar">-- mg/dL</div>
+                <div class="stat-extra">
+                    <span id="tagSugar" class="tag tag-normal">--</span>
+                    <div style="margin-top:4px;" id="avgSugar">7-Day: -- | Trend: --</div>
+                </div>
+            </div>
+
+            <div class="stat-box">
+                <div class="stat-title">Resting Heart Rate</div>
+                <div class="stat-value" id="valHeart">-- bpm</div>
+                <div class="stat-extra">
+                    <span id="tagHeart" class="tag tag-normal">--</span>
+                    <div style="margin-top:4px;" id="avgHeart">7-Day: -- | Trend: --</div>
+                </div>
+            </div>
+
+            <div class="stat-box">
+                <div class="stat-title">Medication Adherence</div>
+                <div class="stat-value" id="valAdherence">--%</div>
+                <div class="stat-extra">
+                    <span class="tag tag-normal">Active Compliance</span>
+                    <div style="margin-top:4px;">Taken vs Missed logs</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Today's Medication Schedule -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Today's Medication Schedule</h3>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Medicine</th>
+                        <th>Dosage</th>
+                        <th>Instructions</th>
+                        <th>Status</th>
+                        <th style="text-align:right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="medScheduleBody">
+                    <tr><td colspan="6" style="text-align:center;">Loading schedule...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Upcoming Appointments -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Upcoming Doctor Appointments (with 30-min Conflict Protection)</h3>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date & Time</th>
+                        <th>Doctor</th>
+                        <th>Hospital</th>
+                        <th>Purpose</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="apptBody">
+                    <tr><td colspan="5" style="text-align:center;">Loading appointments...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Emergency Contacts -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Emergency Contacts (Priority Order)</h3>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:60px;">Priority</th>
+                        <th>Name</th>
+                        <th>Relationship</th>
+                        <th>Phone</th>
+                    </tr>
+                </thead>
+                <tbody id="contactsBody">
+                    <tr><td colspan="4" style="text-align:center;">Loading contacts...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Recent Health Readings -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Recent Health Readings</h3>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date & Time</th>
+                        <th>Vital Type</th>
+                        <th>Summary</th>
+                        <th>Evaluation</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody id="readingsBody">
+                    <tr><td colspan="5" style="text-align:center;">Loading readings...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Reports -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Generated Health & Activity Report</h3>
+                <div style="display:flex; gap:6px;">
+                    <select id="reportTypeSelect" style="padding:4px 8px; font-size:12px;">
+                        <option value="full">Full Comprehensive Report</option>
+                        <option value="health">Health Summary Only</option>
+                        <option value="adherence">Medication Adherence Only</option>
+                        <option value="appointments">Appointment History Only</option>
+                        <option value="alerts">Emergency Alert History Only</option>
+                    </select>
+                    <button class="btn btn-secondary btn-sm" onclick="loadReport()">Generate Report</button>
+                </div>
+            </div>
+            <pre id="reportBox" class="report-area">Click "Generate Report" above to compile data into ASCII table format.</pre>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- MODALS                                                                    -->
+    <!-- ========================================================================= -->
+
+    <!-- Modal: Register New Elder (Admin) -->
+    <div id="elderModal" class="modal-backdrop">
+        <div class="modal-box">
+            <h3>Register New Elder</h3>
+            <form onsubmit="submitNewElder(event)">
+                <div class="form-group">
+                    <label>Full Name:</label>
+                    <input type="text" id="neName" required placeholder="e.g. John Smith">
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                    <div class="form-group">
+                        <label>Age:</label>
+                        <input type="number" id="neAge" min="50" max="120" value="72" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Gender:</label>
+                        <select id="neGender">
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                    <div class="form-group">
+                        <label>Blood Group:</label>
+                        <select id="neBlood">
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="O+" selected>O+</option>
+                            <option value="O-">O-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number (10 digits):</label>
+                        <input type="tel" id="nePhone" pattern="[0-9]{10}" placeholder="9876543210" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Address:</label>
+                    <input type="text" id="neAddress" placeholder="e.g. 14 Elm Street, City Center">
+                </div>
+                <div class="form-group">
+                    <label>Medical Conditions:</label>
+                    <input type="text" id="neConditions" placeholder="e.g. Hypertension, Arthritis">
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('elderModal')">Cancel</button>
+                    <button type="submit" class="btn btn-success">Save Elder</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Add Doctor (Admin) -->
+    <div id="doctorModal" class="modal-backdrop">
+        <div class="modal-box">
+            <h3>Add New Doctor</h3>
+            <form onsubmit="submitNewDoctor(event)">
+                <div class="form-group">
+                    <label>Doctor Name:</label>
+                    <input type="text" id="ndName" required placeholder="e.g. Dr. Robert Wilson">
+                </div>
+                <div class="form-group">
+                    <label>Specialization:</label>
+                    <input type="text" id="ndSpec" required placeholder="e.g. Cardiology / General Medicine">
+                </div>
+                <div class="form-group">
+                    <label>Hospital / Clinic:</label>
+                    <input type="text" id="ndHosp" required placeholder="e.g. City General Hospital">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number (10 digits):</label>
+                    <input type="tel" id="ndPhone" pattern="[0-9]{10}" placeholder="9845112233" required>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('doctorModal')">Cancel</button>
+                    <button type="submit" class="btn btn-success">Save Doctor</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Add Caregiver (Admin) -->
+    <div id="caregiverModal" class="modal-backdrop">
+        <div class="modal-box">
+            <h3>Add New Caregiver</h3>
+            <form onsubmit="submitNewCaregiver(event)">
+                <div class="form-group">
+                    <label>Caregiver Name:</label>
+                    <input type="text" id="ncName" required placeholder="e.g. Sarah Wilson">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number (10 digits):</label>
+                    <input type="tel" id="ncPhone" pattern="[0-9]{10}" placeholder="9899988877" required>
+                </div>
+                <div class="form-group">
+                    <label>Address:</label>
+                    <input type="text" id="ncAddress" placeholder="e.g. 8 Oak Lane, City Center">
+                </div>
+                <div class="form-group">
+                    <label>Relationship / Role:</label>
+                    <input type="text" id="ncRel" required placeholder="e.g. Certified Caregiver / Nurse">
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('caregiverModal')">Cancel</button>
+                    <button type="submit" class="btn btn-success">Save Caregiver</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Add Health Reading -->
+    <div id="readingModal" class="modal-backdrop">
+        <div class="modal-box">
+            <h3>Log Vital Health Reading</h3>
+            <form onsubmit="submitReading(event)">
+                <div class="form-group">
+                    <label>Vital Type:</label>
+                    <select id="readingType" onchange="toggleReadingFields(this.value)">
+                        <option value="BP">Blood Pressure (mmHg)</option>
+                        <option value="SUGAR">Blood Sugar (mg/dL)</option>
+                        <option value="HEART">Heart Rate (BPM)</option>
+                    </select>
+                </div>
+
+                <div id="bpFields">
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                        <div class="form-group">
+                            <label>Systolic (Upper):</label>
+                            <input type="number" id="bpSys" min="60" max="260" value="120">
+                        </div>
+                        <div class="form-group">
+                            <label>Diastolic (Lower):</label>
+                            <input type="number" id="bpDia" min="40" max="160" value="80">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="sugarFields" style="display:none;">
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                        <div class="form-group">
+                            <label>Sugar Level (mg/dL):</label>
+                            <input type="number" step="0.1" id="sugarVal" min="30" max="600" value="105.0">
+                        </div>
+                        <div class="form-group">
+                            <label>Reading Type:</label>
+                            <select id="sugarType">
+                                <option value="FASTING">Fasting</option>
+                                <option value="POST_MEAL">Post-Meal</option>
+                                <option value="RANDOM">Random</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="heartFields" style="display:none;">
+                    <div class="form-group">
+                        <label>Pulse (Beats Per Minute):</label>
+                        <input type="number" id="heartBpm" min="30" max="220" value="72">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Notes / Activity:</label>
+                    <input type="text" id="readingNotes" value="Routine morning measurement">
+                </div>
+
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('readingModal')">Cancel</button>
+                    <button type="submit" class="btn btn-success">Save Reading</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Book Appointment -->
+    <div id="apptModal" class="modal-backdrop">
+        <div class="modal-box">
+            <h3>Book Doctor Appointment</h3>
+            <form onsubmit="submitAppointment(event)">
+                <div class="form-group">
+                    <label>Select Doctor:</label>
+                    <select id="apptDoctor" required>
+                        <!-- Loaded dynamically -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Date & Time:</label>
+                    <input type="datetime-local" id="apptDateTime" required>
+                    <div class="form-help">System automatically enforces 30-minute conflict spacing between appointments.</div>
+                </div>
+                <div class="form-group">
+                    <label>Purpose / Symptoms:</label>
+                    <input type="text" id="apptPurpose" value="Routine Health Checkup" required>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('apptModal')">Cancel</button>
+                    <button type="submit" class="btn btn-success">Confirm Booking</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Emergency SOS Confirmation -->
+    <div id="sosModal" class="modal-backdrop">
+        <div class="modal-box" style="border-top:4px solid #cf222e;">
+            <h3 style="color:#cf222e;">Trigger Emergency SOS Alert</h3>
+            <p style="font-size:13px; color:#444;">
+                This will simulate an immediate emergency dispatch to family contacts in priority order and notify the elder's assigned physician.
+            </p>
+            <div class="form-group">
+                <label>Emergency Reason / Notes:</label>
+                <input type="text" id="sosReason" value="One-Touch Emergency SOS Pressed from Dashboard">
+            </div>
+            <div class="modal-buttons">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('sosModal')">Cancel</button>
+                <button type="button" class="btn btn-danger" onclick="triggerSOS()">Confirm SOS Alert</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- JAVASCRIPT LOGIC                                                          -->
+    <!-- ========================================================================= -->
+    <script>
+        const API_BASE = '';
+        let currentUser = null; // { role: 'ADMIN' } or { role: 'ELDER', elderId: 1, name: 'John Smith' }
+        let currentElderId = 1;
+        let allEldersList = [];
+        let allDoctorsList = [];
+
+        // --- Initialization ---
+        window.addEventListener('DOMContentLoaded', () => {
+            // Set default appointment date to tomorrow at 10:00
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(10, 0, 0, 0);
+            const isoStr = new Date(tomorrow.getTime() - tomorrow.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+            document.getElementById('apptDateTime').value = isoStr;
+
+            loadEldersList();
+            loadDoctorsList();
+
+            // Check if user session stored
+            const savedUser = sessionStorage.getItem('eldercare_user');
+            if (savedUser) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    if (currentUser.role === 'ADMIN') {
+                        showAdminView();
+                    } else if (currentUser.role === 'ELDER') {
+                        currentElderId = currentUser.elderId || 1;
+                        showElderView();
+                    }
+                } catch (e) {
+                    showLoginView();
+                }
+            } else {
+                showLoginView();
+            }
+        });
+
+        // --- Navigation & View Switching ---
+        function showLoginView() {
+            document.getElementById('viewLogin').style.display = 'flex';
+            document.getElementById('topNavbar').style.display = 'none';
+            document.getElementById('viewAdmin').style.display = 'none';
+            document.getElementById('viewElder').style.display = 'none';
+        }
+
+        function showAdminView() {
+            currentUser = { role: 'ADMIN', name: 'Administrator' };
+            sessionStorage.setItem('eldercare_user', JSON.stringify(currentUser));
+
+            document.getElementById('viewLogin').style.display = 'none';
+            document.getElementById('topNavbar').style.display = 'flex';
+            document.getElementById('viewAdmin').style.display = 'block';
+            document.getElementById('viewElder').style.display = 'none';
+
+            // Navbar items
+            const badge = document.getElementById('navRoleBadge');
+            badge.className = 'role-badge badge-admin';
+            badge.innerText = 'Admin Portal';
+            document.getElementById('navUserLabel').innerText = 'Admin';
+            document.getElementById('elderNavControls').style.display = 'none';
+            document.getElementById('btnSwitchToAdmin').style.display = 'none';
+            document.getElementById('btnSwitchToElder').style.display = 'inline-block';
+
+            loadAdminOverview();
+        }
+
+        function showElderView(elderId) {
+            if (elderId) {
+                currentElderId = elderId;
+            }
+            if (!currentUser || currentUser.role !== 'ADMIN') {
+                const selectedObj = allEldersList.find(e => e.id == currentElderId);
+                currentUser = { role: 'ELDER', elderId: currentElderId, name: selectedObj ? selectedObj.name : 'Elder' };
+                sessionStorage.setItem('eldercare_user', JSON.stringify(currentUser));
+            }
+
+            document.getElementById('viewLogin').style.display = 'none';
+            document.getElementById('topNavbar').style.display = 'flex';
+            document.getElementById('viewAdmin').style.display = 'none';
+            document.getElementById('viewElder').style.display = 'block';
+
+            const badge = document.getElementById('navRoleBadge');
+            badge.className = 'role-badge badge-elder';
+            badge.innerText = 'Elder View';
+            document.getElementById('navUserLabel').innerText = (currentUser.role === 'ADMIN') ? 'Admin (Previewing Elder)' : currentUser.name;
+
+            document.getElementById('elderNavControls').style.display = 'flex';
+            document.getElementById('navElderSelect').value = currentElderId;
+
+            if (currentUser.role === 'ADMIN') {
+                document.getElementById('btnSwitchToAdmin').style.display = 'inline-block';
+                document.getElementById('btnSwitchToElder').style.display = 'none';
+            } else {
+                document.getElementById('btnSwitchToAdmin').style.display = 'none';
+                document.getElementById('btnSwitchToElder').style.display = 'none';
+            }
+
+            loadElderDashboard(currentElderId);
+        }
+
+        function logout() {
+            sessionStorage.removeItem('eldercare_user');
+            currentUser = null;
+            showLoginView();
+        }
+
+        // --- Login Page Handling ---
+        function switchLoginTab(tab) {
+            const btnElder = document.getElementById('tabBtnElder');
+            const btnAdmin = document.getElementById('tabBtnAdmin');
+            const formElder = document.getElementById('formLoginElder');
+            const formAdmin = document.getElementById('formLoginAdmin');
+            const alertBox = document.getElementById('loginAlert');
+            alertBox.style.display = 'none';
+
+            if (tab === 'elder') {
+                btnElder.classList.add('active');
+                btnAdmin.classList.remove('active');
+                formElder.style.display = 'block';
+                formAdmin.style.display = 'none';
+            } else {
+                btnAdmin.classList.add('active');
+                btnElder.classList.remove('active');
+                formAdmin.style.display = 'block';
+                formElder.style.display = 'none';
+            }
+        }
+
+        function handleElderLogin(e) {
+            e.preventDefault();
+            const elderId = parseInt(document.getElementById('loginElderSelect').value);
+            const pin = document.getElementById('elderPin').value.trim();
+            const alertBox = document.getElementById('loginAlert');
+
+            if (!elderId) {
+                alertBox.innerText = 'Please select an elder profile.';
+                alertBox.style.display = 'block';
+                return;
+            }
+            if (pin !== '1234') {
+                alertBox.innerText = 'Invalid PIN. Please enter default demo PIN: 1234';
+                alertBox.style.display = 'block';
+                return;
+            }
+
+            currentElderId = elderId;
+            showElderView(elderId);
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const user = document.getElementById('adminUsername').value.trim();
+            const pass = document.getElementById('adminPassword').value.trim();
+            const alertBox = document.getElementById('loginAlert');
+
+            if (user === 'admin' && (pass === 'admin' || pass === 'admin123')) {
+                showAdminView();
+            } else {
+                alertBox.innerText = 'Invalid administrator credentials. (Default: admin / admin)';
+                alertBox.style.display = 'block';
+            }
+        }
+
+        // --- Data Loading: Elders & Doctors Selects ---
+        async function loadEldersList() {
+            try {
+                const res = await fetch(`${API_BASE}/api/elders`);
+                allEldersList = await res.json();
+
+                const loginSelect = document.getElementById('loginElderSelect');
+                const navSelect = document.getElementById('navElderSelect');
+
+                loginSelect.innerHTML = '';
+                navSelect.innerHTML = '';
+
+                if (allEldersList.length === 0) {
+                    loginSelect.innerHTML = '<option value="">No elders registered (Sign in as Admin to add)</option>';
+                    return;
+                }
+
+                allEldersList.forEach(e => {
+                    const opt1 = document.createElement('option');
+                    opt1.value = e.id;
+                    opt1.textContent = `${e.name} (Age: ${e.age}, ${e.bloodGroup})`;
+                    loginSelect.appendChild(opt1);
+
+                    const opt2 = document.createElement('option');
+                    opt2.value = e.id;
+                    opt2.textContent = e.name;
+                    navSelect.appendChild(opt2);
+                });
+
+                if (allEldersList.length > 0 && !currentElderId) {
+                    currentElderId = allEldersList[0].id;
+                }
+            } catch (err) {
+                console.error('Failed to load elders list:', err);
+            }
+        }
+
+        async function loadDoctorsList() {
+            try {
+                const res = await fetch(`${API_BASE}/api/doctors`);
+                allDoctorsList = await res.json();
+                const apptSelect = document.getElementById('apptDoctor');
+                apptSelect.innerHTML = '';
+
+                allDoctorsList.forEach(d => {
+                    const opt = document.createElement('option');
+                    opt.value = d.id;
+                    opt.textContent = `${d.name} (${d.specialization} - ${d.hospital})`;
+                    apptSelect.appendChild(opt);
+                });
+            } catch (err) {
+                console.error('Failed to load doctors:', err);
+            }
+        }
+
+        // --- Admin Portal Logic ---
+        function switchAdminTab(tab) {
+            const tabs = ['elders', 'doctors', 'caregivers', 'alerts', 'appts'];
+            const buttons = document.querySelectorAll('.nav-tab-btn');
+
+            tabs.forEach((t, idx) => {
+                const content = document.getElementById('adminTab' + t.charAt(0).toUpperCase() + t.slice(1));
+                if (content) {
+                    content.style.display = (t === tab) ? 'block' : 'none';
+                }
+                if (buttons[idx]) {
+                    buttons[idx].classList.toggle('active', t === tab);
+                }
+            });
+        }
+
+        async function loadAdminOverview() {
+            try {
+                const res = await fetch(`${API_BASE}/api/admin/overview`);
+                const data = await res.json();
+
+                // 1. KPI Counts
+                document.getElementById('kpiElders').innerText = data.stats.elders;
+                document.getElementById('kpiDoctors').innerText = data.stats.doctors;
+                document.getElementById('kpiCaregivers').innerText = data.stats.caregivers;
+                document.getElementById('kpiAlerts').innerText = data.stats.alerts;
+
+                // 2. Elders Table
+                const eldersBody = document.getElementById('adminEldersTableBody');
+                if (data.elders.length === 0) {
+                    eldersBody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:#666;">No elders registered yet. Click "+ Register New Elder" above.</td></tr>';
+                } else {
+                    eldersBody.innerHTML = data.elders.map(e => `
+                        <tr>
+                            <td><strong>${e.id}</strong></td>
+                            <td><strong>${escapeHtml(e.name)}</strong></td>
+                            <td>${e.age} yrs / ${escapeHtml(e.gender)}</td>
+                            <td><span class="tag tag-normal">${escapeHtml(e.bloodGroup)}</span></td>
+                            <td>${escapeHtml(e.phone)}</td>
+                            <td>${escapeHtml(e.address || '--')}</td>
+                            <td>${escapeHtml(e.conditions || 'None')}</td>
+                            <td style="text-align:right;">
+                                <button class="btn btn-sm" onclick="showElderView(${e.id})">View Dashboard</button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteElder(${e.id}, '${escapeHtml(e.name)}')">Delete</button>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+
+                // 3. Doctors Table
+                const doctorsBody = document.getElementById('adminDoctorsTableBody');
+                if (data.doctors.length === 0) {
+                    doctorsBody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#666;">No doctors registered yet.</td></tr>';
+                } else {
+                    doctorsBody.innerHTML = data.doctors.map(d => `
+                        <tr>
+                            <td><strong>${d.id}</strong></td>
+                            <td><strong>${escapeHtml(d.name)}</strong></td>
+                            <td>${escapeHtml(d.specialization)}</td>
+                            <td>${escapeHtml(d.hospital)}</td>
+                            <td>${escapeHtml(d.phone)}</td>
+                            <td style="text-align:right;">
+                                <button class="btn btn-danger btn-sm" onclick="deleteDoctor(${d.id}, '${escapeHtml(d.name)}')">Delete</button>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+
+                // 4. Caregivers Table
+                const caregiversBody = document.getElementById('adminCaregiversTableBody');
+                if (data.caregivers.length === 0) {
+                    caregiversBody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#666;">No caregivers registered yet.</td></tr>';
+                } else {
+                    caregiversBody.innerHTML = data.caregivers.map(c => `
+                        <tr>
+                            <td><strong>${c.id}</strong></td>
+                            <td><strong>${escapeHtml(c.name)}</strong></td>
+                            <td>${escapeHtml(c.phone)}</td>
+                            <td>${escapeHtml(c.address || '--')}</td>
+                            <td>${escapeHtml(c.relationship)}</td>
+                            <td style="text-align:right;">
+                                <button class="btn btn-danger btn-sm" onclick="deleteCaregiver(${c.id}, '${escapeHtml(c.name)}')">Delete</button>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+
+                // 5. Emergency Alerts Table
+                const alertsBody = document.getElementById('adminAlertsTableBody');
+                if (data.alerts.length === 0) {
+                    alertsBody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#666;">No emergency alerts triggered yet. System status normal.</td></tr>';
+                } else {
+                    alertsBody.innerHTML = data.alerts.map(a => `
+                        <tr>
+                            <td><strong>#${a.id}</strong></td>
+                            <td>${escapeHtml(a.time)}</td>
+                            <td><strong>${escapeHtml(a.elderName)}</strong></td>
+                            <td><span class="tag tag-critical">${escapeHtml(a.reason)}</span></td>
+                            <td style="font-size:12px; color:#555;">${escapeHtml(a.notified)}</td>
+                        </tr>
+                    `).join('');
+                }
+
+                // 6. Appointments Table
+                const apptsBody = document.getElementById('adminApptsTableBody');
+                if (data.appointments.length === 0) {
+                    apptsBody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#666;">No appointments booked yet.</td></tr>';
+                } else {
+                    apptsBody.innerHTML = data.appointments.map(ap => `
+                        <tr>
+                            <td><strong>#${ap.id}</strong></td>
+                            <td>${escapeHtml(ap.time)}</td>
+                            <td><strong>${escapeHtml(ap.elderName)}</strong></td>
+                            <td>${escapeHtml(ap.doctor)}</td>
+                            <td>${escapeHtml(ap.hospital)}</td>
+                            <td>${escapeHtml(ap.purpose)}</td>
+                            <td><span class="tag ${ap.status === 'COMPLETED' ? 'tag-normal' : 'tag-low'}">${ap.status}</span></td>
+                        </tr>
+                    `).join('');
+                }
+
+            } catch (err) {
+                console.error('Failed to load admin overview:', err);
+            }
+        }
+
+        // --- Admin Actions (Add / Delete) ---
+        async function submitNewElder(e) {
+            e.preventDefault();
+            const payload = {
+                name: document.getElementById('neName').value.trim(),
+                age: document.getElementById('neAge').value,
+                gender: document.getElementById('neGender').value,
+                bloodGroup: document.getElementById('neBlood').value,
+                phone: document.getElementById('nePhone').value.trim(),
+                address: document.getElementById('neAddress').value.trim(),
+                medicalConditions: document.getElementById('neConditions').value.trim()
+            };
+
+            const res = await fetch(`${API_BASE}/api/elders`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (res.ok) {
+                closeModal('elderModal');
+                await loadEldersList();
+                loadAdminOverview();
+                alert('Elder registered successfully!');
+            } else {
+                alert('Failed to register elder.');
+            }
+        }
+
+        async function deleteElder(id, name) {
+            if (!confirm(`Are you sure you want to delete ${name}? All associated records, vitals, and medication schedules will be removed.`)) {
+                return;
+            }
+            const res = await fetch(`${API_BASE}/api/elders?id=${id}`, { method: 'DELETE' });
+            if (res.ok) {
+                await loadEldersList();
+                loadAdminOverview();
+            } else {
+                alert('Failed to delete elder.');
+            }
+        }
+
+        async function submitNewDoctor(e) {
+            e.preventDefault();
+            const payload = {
+                name: document.getElementById('ndName').value.trim(),
+                specialization: document.getElementById('ndSpec').value.trim(),
+                hospital: document.getElementById('ndHosp').value.trim(),
+                phone: document.getElementById('ndPhone').value.trim()
+            };
+
+            const res = await fetch(`${API_BASE}/api/doctors`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (res.ok) {
+                closeModal('doctorModal');
+                await loadDoctorsList();
+                loadAdminOverview();
+                alert('Doctor added successfully!');
+            } else {
+                alert('Failed to add doctor.');
+            }
+        }
+
+        async function deleteDoctor(id, name) {
+            if (!confirm(`Are you sure you want to delete Dr. ${name}?`)) {
+                return;
+            }
+            const res = await fetch(`${API_BASE}/api/doctors?id=${id}`, { method: 'DELETE' });
+            if (res.ok) {
+                await loadDoctorsList();
+                loadAdminOverview();
+            } else {
+                alert('Failed to delete doctor.');
+            }
+        }
+
+        async function submitNewCaregiver(e) {
+            e.preventDefault();
+            const payload = {
+                name: document.getElementById('ncName').value.trim(),
+                phone: document.getElementById('ncPhone').value.trim(),
+                address: document.getElementById('ncAddress').value.trim(),
+                relationship: document.getElementById('ncRel').value.trim()
+            };
+
+            const res = await fetch(`${API_BASE}/api/caregivers`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (res.ok) {
+                closeModal('caregiverModal');
+                loadAdminOverview();
+                alert('Caregiver added successfully!');
+            } else {
+                alert('Failed to add caregiver.');
+            }
+        }
+
+        async function deleteCaregiver(id, name) {
+            if (!confirm(`Are you sure you want to delete caregiver ${name}?`)) {
+                return;
+            }
+            const res = await fetch(`${API_BASE}/api/caregivers?id=${id}`, { method: 'DELETE' });
+            if (res.ok) {
+                loadAdminOverview();
+            } else {
+                alert('Failed to delete caregiver.');
+            }
+        }
+
+        async function resetSampleData() {
+            if (!confirm('This will reset the entire database to clean, standard student demo records (John Smith, Mary Davis, doctors, logs). Continue?')) {
+                return;
+            }
+            const res = await fetch(`${API_BASE}/api/reset-data`, { method: 'POST' });
+            if (res.ok) {
+                alert('Database successfully reset to clean sample data!');
+                await loadEldersList();
+                await loadDoctorsList();
+                loadAdminOverview();
+            } else {
+                alert('Failed to reset sample data.');
+            }
+        }
+
+        // --- Elder Dashboard Logic ---
+        function switchElder(elderId) {
+            currentElderId = parseInt(elderId);
+            loadElderDashboard(currentElderId);
+        }
+
+        async function loadElderDashboard(elderId) {
+            try {
+                const res = await fetch(`${API_BASE}/api/dashboard?elderId=${elderId}`);
+                if (!res.ok) throw new Error('Failed to fetch dashboard');
+                const data = await res.json();
+
+                // Profile
+                document.getElementById('pName').innerText = data.elder.name;
+                document.getElementById('pAgeGender').innerText = `Age: ${data.elder.age} (${data.elder.gender})`;
+                document.getElementById('pBlood').innerText = `Blood: ${data.elder.bloodGroup}`;
+                document.getElementById('pPhone').innerText = `Phone: ${data.elder.phone}`;
+                document.getElementById('pConditions').innerText = `Conditions: ${data.elder.conditions || 'None'}`;
+
+                // Vitals Cards
+                // 1. BP
+                const latestBp = data.readings.find(r => r.type === 'BP');
+                if (latestBp) {
+                    document.getElementById('valBp').innerText = latestBp.summary.replace('Blood Pressure: ', '');
+                    setBadge('tagBp', latestBp.status);
+                } else {
+                    document.getElementById('valBp').innerText = '--/--';
+                    document.getElementById('tagBp').innerText = 'No Data';
+                }
+                const bpAvg = data.metrics.bp.avg7Sys ? `${data.metrics.bp.avg7Sys}/${data.metrics.bp.avg7Dia}` : 'N/A';
+                document.getElementById('avgBp').innerText = `7-Day Avg: ${bpAvg} | Trend: ${data.metrics.bp.trend}`;
+
+                // 2. Sugar
+                const latestSugar = data.readings.find(r => r.type === 'SUGAR');
+                if (latestSugar) {
+                    const match = latestSugar.summary.match(/([\d\.]+)\s*mg\/dL/);
+                    document.getElementById('valSugar').innerText = (match ? match[1] : '--') + ' mg/dL';
+                    setBadge('tagSugar', latestSugar.status);
+                } else {
+                    document.getElementById('valSugar').innerText = '-- mg/dL';
+                    document.getElementById('tagSugar').innerText = 'No Data';
+                }
+                const sugarAvg = data.metrics.sugar.avg7 ? `${data.metrics.sugar.avg7} mg/dL` : 'N/A';
+                document.getElementById('avgSugar').innerText = `7-Day Avg: ${sugarAvg} | Trend: ${data.metrics.sugar.trend}`;
+
+                // 3. Heart Rate
+                const latestHeart = data.readings.find(r => r.type === 'HEART');
+                if (latestHeart) {
+                    const match = latestHeart.summary.match(/(\d+)\s*bpm/);
+                    document.getElementById('valHeart').innerText = (match ? match[1] : '--') + ' bpm';
+                    setBadge('tagHeart', latestHeart.status);
+                } else {
+                    document.getElementById('valHeart').innerText = '-- bpm';
+                    document.getElementById('tagHeart').innerText = 'No Data';
+                }
+                const hrAvg = data.metrics.heart.avg7 ? `${data.metrics.heart.avg7} bpm` : 'N/A';
+                document.getElementById('avgHeart').innerText = `7-Day Avg: ${hrAvg} | Trend: ${data.metrics.heart.trend}`;
+
+                // 4. Adherence
+                document.getElementById('valAdherence').innerText = data.metrics.adherence.toFixed(1) + '%';
+
+                // Schedule Table
+                const schedBody = document.getElementById('medScheduleBody');
+                if (data.todaySchedule.length === 0) {
+                    schedBody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#666;">No medications scheduled for today.</td></tr>';
+                } else {
+                    schedBody.innerHTML = data.todaySchedule.map(item => `
+                        <tr>
+                            <td><strong>${escapeHtml(item.time)}</strong></td>
+                            <td><strong>${escapeHtml(item.name)}</strong></td>
+                            <td>${escapeHtml(item.dosage)}</td>
+                            <td>${escapeHtml(item.instructions || '--')}</td>
+                            <td>${getStatusPill(item.status)}</td>
+                            <td style="text-align:right;">
+                                ${item.status === 'PENDING' ? `
+                                    <button class="btn btn-success btn-sm" onclick="logDose(${item.medicationId}, '${item.scheduledTime}', 'TAKEN')">Mark Taken</button>
+                                    <button class="btn btn-danger btn-sm" onclick="logDose(${item.medicationId}, '${item.scheduledTime}', 'SKIPPED')">Skip</button>
+                                ` : '<span style="color:#666; font-size:12px;">Logged</span>'}
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+
+                // Appointments Table
+                const apptBody = document.getElementById('apptBody');
+                if (data.appointments.length === 0) {
+                    apptBody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#666;">No upcoming doctor appointments scheduled.</td></tr>';
+                } else {
+                    apptBody.innerHTML = data.appointments.map(a => `
+                        <tr>
+                            <td><strong>${escapeHtml(a.time)}</strong></td>
+                            <td>${escapeHtml(a.doctor)}</td>
+                            <td>${escapeHtml(a.hospital)}</td>
+                            <td>${escapeHtml(a.purpose)}</td>
+                            <td><span class="tag tag-normal">${escapeHtml(a.status)}</span></td>
+                        </tr>
+                    `).join('');
+                }
+
+                // Contacts Table
+                const contactsBody = document.getElementById('contactsBody');
+                if (data.contacts.length === 0) {
+                    contactsBody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#666;">No emergency contacts registered.</td></tr>';
+                } else {
+                    contactsBody.innerHTML = data.contacts.map(c => `
+                        <tr>
+                            <td><span class="tag tag-normal">Priority ${c.priority}</span></td>
+                            <td><strong>${escapeHtml(c.name)}</strong></td>
+                            <td>${escapeHtml(c.relationship)}</td>
+                            <td>${escapeHtml(c.phone)}</td>
+                        </tr>
+                    `).join('');
+                }
+
+                // Readings Table
+                const readingsBody = document.getElementById('readingsBody');
+                if (data.readings.length === 0) {
+                    readingsBody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#666;">No health readings recorded yet.</td></tr>';
+                } else {
+                    readingsBody.innerHTML = data.readings.slice(0, 10).map(r => `
+                        <tr>
+                            <td>${escapeHtml(r.time)}</td>
+                            <td><strong>${escapeHtml(r.type)}</strong></td>
+                            <td>${escapeHtml(r.summary)}</td>
+                            <td>${getStatusPill(r.status)}</td>
+                            <td style="color:#555;">${escapeHtml(r.notes || '--')}</td>
+                        </tr>
+                    `).join('');
+                }
+
+            } catch (err) {
+                console.error('Error loading elder dashboard:', err);
+            }
+        }
+
+        // Helper tag badges
+        function setBadge(elementId, status) {
+            const el = document.getElementById(elementId);
+            el.innerText = status;
+            el.className = 'tag ' + (
+                status === 'NORMAL' ? 'tag-normal' :
+                status === 'ELEVATED' ? 'tag-elevated' :
+                status === 'HIGH' ? 'tag-high' :
+                status === 'LOW' ? 'tag-low' : 'tag-critical'
+            );
+        }
+
+        function getStatusPill(status) {
+            let cls = 'tag-normal';
+            if (status === 'ELEVATED' || status === 'PENDING') cls = 'tag-elevated';
+            if (status === 'HIGH' || status === 'MISSED' || status === 'SKIPPED') cls = 'tag-high';
+            if (status === 'CRITICAL') cls = 'tag-critical';
+            return `<span class="tag ${cls}">${escapeHtml(status)}</span>`;
+        }
+
+        // Dose Action
+        async function logDose(medicationId, scheduledTime, status) {
+            const res = await fetch(`${API_BASE}/api/dose-log`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ medicationId, scheduledTime, status })
+            });
+            if (res.ok) {
+                loadElderDashboard(currentElderId);
+            } else {
+                alert('Failed to log dose');
+            }
+        }
+
+        // Add Reading
+        function toggleReadingFields(type) {
+            document.getElementById('bpFields').style.display = (type === 'BP') ? 'block' : 'none';
+            document.getElementById('sugarFields').style.display = (type === 'SUGAR') ? 'block' : 'none';
+            document.getElementById('heartFields').style.display = (type === 'HEART') ? 'block' : 'none';
+        }
+
+        async function submitReading(e) {
+            e.preventDefault();
+            const type = document.getElementById('readingType').value;
+            const notes = document.getElementById('readingNotes').value;
+
+            const payload = { elderId: currentElderId, type, notes };
+            if (type === 'BP') {
+                payload.systolic = document.getElementById('bpSys').value;
+                payload.diastolic = document.getElementById('bpDia').value;
+            } else if (type === 'SUGAR') {
+                payload.sugarValue = document.getElementById('sugarVal').value;
+                payload.sugarType = document.getElementById('sugarType').value;
+            } else if (type === 'HEART') {
+                payload.bpm = document.getElementById('heartBpm').value;
+            }
+
+            const res = await fetch(`${API_BASE}/api/health-reading`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                closeModal('readingModal');
+                loadElderDashboard(currentElderId);
+                if (data.isCritical) {
+                    alert('CRITICAL VITAL ALERT!\nReading has exceeded danger thresholds. Emergency protocols evaluated.');
+                }
+            } else {
+                alert('Failed to record health reading');
+            }
+        }
+
+        // Book Appointment
+        async function submitAppointment(e) {
+            e.preventDefault();
+            const doctorId = document.getElementById('apptDoctor').value;
+            const rawDateTime = document.getElementById('apptDateTime').value;
+            const purpose = document.getElementById('apptPurpose').value;
+
+            // Format to dd/MM/yyyy HH:mm
+            const dateObj = new Date(rawDateTime);
+            const pad = (n) => String(n).padStart(2, '0');
+            const formatted = `${pad(dateObj.getDate())}/${pad(dateObj.getMonth() + 1)}/${dateObj.getFullYear()} ${pad(dateObj.getHours())}:${pad(dateObj.getMinutes())}`;
+
+            const res = await fetch(`${API_BASE}/api/appointment`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    elderId: currentElderId,
+                    doctorId: doctorId,
+                    dateTime: formatted,
+                    purpose: purpose
+                })
+            });
+
+            if (res.ok) {
+                closeModal('apptModal');
+                loadElderDashboard(currentElderId);
+                alert('Appointment successfully booked with conflict check validation!');
+            } else {
+                const data = await res.json();
+                alert('Booking Error: ' + (data.error || 'Conflict detected or invalid time.'));
+            }
+        }
+
+        // Emergency SOS
+        async function triggerSOS() {
+            const reason = document.getElementById('sosReason').value;
+            const res = await fetch(`${API_BASE}/api/sos`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ elderId: currentElderId, reason })
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                closeModal('sosModal');
+                loadElderDashboard(currentElderId);
+                alert(`EMERGENCY SOS DISPATCHED!\nAlert ID: #${data.alertId}\nReason: ${data.reason}\nDoctor: ${data.doctor}\nContacts Notified: ${data.contacts.map(c => c.name + ' (' + c.phone + ')').join(', ')}`);
+            } else {
+                alert('Failed to trigger SOS');
+            }
+        }
+
+        // Report
+        async function loadReport() {
+            const type = document.getElementById('reportTypeSelect').value;
+            const reportBox = document.getElementById('reportBox');
+            reportBox.innerText = 'Generating report...';
+
+            const res = await fetch(`${API_BASE}/api/report?elderId=${currentElderId}&type=${type}`);
+            if (res.ok) {
+                const data = await res.json();
+                reportBox.innerText = data.report;
+            } else {
+                reportBox.innerText = 'Failed to generate report.';
+            }
+        }
+
+        // Modal Helpers
+        function openModal(id) {
+            document.getElementById(id).style.display = 'flex';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+    </script>
+</body>
+</html>
