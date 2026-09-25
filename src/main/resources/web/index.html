@@ -515,20 +515,18 @@
 
             <div id="loginAlert" class="alert-bar alert-bar-danger"></div>
 
-            <!-- 1. ELDER SIGN IN FORM -->
-            <form id="formElderSignIn" onsubmit="handleElderSignIn(event)">
+            <!-- 1. UNIFIED SIGN IN FORM (Username + Password for selected role) -->
+            <form id="formSignIn" onsubmit="handleSignIn(event)">
                 <div class="form-group">
-                    <label for="loginElderSelect">Select Elder Profile:</label>
-                    <select id="loginElderSelect" required>
-                        <option value="">Loading elders...</option>
-                    </select>
+                    <label id="signInUserLabel" for="loginUsername">Username (Full Name or Phone):</label>
+                    <input type="text" id="loginUsername" placeholder="Enter your name or phone number" required>
                 </div>
                 <div class="form-group">
-                    <label for="elderPin">Access PIN:</label>
-                    <input type="password" id="elderPin" value="1234" required>
-                    <div class="form-help">Default demo PIN: <strong>1234</strong></div>
+                    <label for="loginPassword">Password:</label>
+                    <input type="password" id="loginPassword" placeholder="Enter password" required>
+                    <div id="signInHelpText" class="form-help">Existing accounts default password: <strong>1234</strong></div>
                 </div>
-                <button type="submit" class="btn btn-success" style="width:100%; padding:9px; font-weight:bold;">
+                <button id="signInSubmitBtn" type="submit" class="btn btn-success" style="width:100%; padding:9px; font-weight:bold;">
                     Sign In to Elder Dashboard
                 </button>
             </form>
@@ -536,8 +534,12 @@
             <!-- 2. ELDER SIGN UP FORM -->
             <form id="formElderSignUp" onsubmit="handleElderSignUp(event)" style="display:none;">
                 <div class="form-group">
-                    <label>Full Name:</label>
-                    <input type="text" id="suElderName" required placeholder="e.g. Ramesh Kumar">
+                    <label>Full Name (Username):</label>
+                    <input type="text" id="suElderName" required placeholder="e.g. John Smith">
+                </div>
+                <div class="form-group">
+                    <label>Create Password:</label>
+                    <input type="password" id="suElderPassword" required placeholder="Enter a password">
                 </div>
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
                     <div class="form-group">
@@ -581,29 +583,19 @@
                     <input type="text" id="suElderConditions" placeholder="e.g. Hypertension, Diabetes">
                 </div>
                 <button type="submit" class="btn btn-success" style="width:100%; padding:9px; font-weight:bold;">
-                    Register & Enter Elder Dashboard
+                    Sign Up & Enter Elder Dashboard
                 </button>
             </form>
 
-            <!-- 3. DOCTOR SIGN IN FORM -->
-            <form id="formDoctorSignIn" onsubmit="handleDoctorSignIn(event)" style="display:none;">
-                <div class="form-group">
-                    <label for="loginDoctorSelect">Select Doctor Profile:</label>
-                    <select id="loginDoctorSelect" required>
-                        <option value="">Loading doctors...</option>
-                    </select>
-                </div>
-                <div class="form-help" style="margin-bottom:12px;">Doctor clinical review access (No password required in demo)</div>
-                <button type="submit" class="btn" style="width:100%; padding:9px; font-weight:bold;">
-                    Sign In to Doctor Clinical Portal
-                </button>
-            </form>
-
-            <!-- 4. DOCTOR SIGN UP FORM -->
+            <!-- 3. DOCTOR SIGN UP FORM -->
             <form id="formDoctorSignUp" onsubmit="handleDoctorSignUp(event)" style="display:none;">
                 <div class="form-group">
-                    <label>Doctor Name:</label>
-                    <input type="text" id="suDocName" required placeholder="e.g. Dr. Rajesh Sharma">
+                    <label>Doctor Name (Username):</label>
+                    <input type="text" id="suDocName" required placeholder="e.g. Dr. James Anderson">
+                </div>
+                <div class="form-group">
+                    <label>Create Password:</label>
+                    <input type="password" id="suDocPassword" required placeholder="Enter a password">
                 </div>
                 <div class="form-group">
                     <label>Specialization:</label>
@@ -618,29 +610,19 @@
                     <input type="tel" id="suDocPhone" pattern="[0-9]{10}" placeholder="10-digit mobile" required>
                 </div>
                 <button type="submit" class="btn" style="width:100%; padding:9px; font-weight:bold;">
-                    Register & Enter Doctor Portal
+                    Sign Up & Enter Doctor Portal
                 </button>
             </form>
 
-            <!-- 5. CAREGIVER SIGN IN FORM -->
-            <form id="formCaregiverSignIn" onsubmit="handleCaregiverSignIn(event)" style="display:none;">
-                <div class="form-group">
-                    <label for="loginCaregiverSelect">Select Caregiver Profile:</label>
-                    <select id="loginCaregiverSelect" required>
-                        <option value="">Loading caregivers...</option>
-                    </select>
-                </div>
-                <div class="form-help" style="margin-bottom:12px;">Caregiver supervision access to view & assist elders</div>
-                <button type="submit" class="btn" style="background:#8250df; width:100%; padding:9px; font-weight:bold;">
-                    Sign In to Caregiver Portal
-                </button>
-            </form>
-
-            <!-- 6. CAREGIVER SIGN UP FORM -->
+            <!-- 4. CAREGIVER SIGN UP FORM -->
             <form id="formCaregiverSignUp" onsubmit="handleCaregiverSignUp(event)" style="display:none;">
                 <div class="form-group">
-                    <label>Caregiver Name:</label>
-                    <input type="text" id="suCareName" required placeholder="e.g. Devika">
+                    <label>Caregiver Name (Username):</label>
+                    <input type="text" id="suCareName" required placeholder="e.g. Sarah Wilson">
+                </div>
+                <div class="form-group">
+                    <label>Create Password:</label>
+                    <input type="password" id="suCarePassword" required placeholder="Enter a password">
                 </div>
                 <div class="form-group">
                     <label>Phone Number:</label>
@@ -655,23 +637,7 @@
                     <input type="text" id="suCareRel" required placeholder="e.g. Nurse / Family Caregiver">
                 </div>
                 <button type="submit" class="btn" style="background:#8250df; width:100%; padding:9px; font-weight:bold;">
-                    Register & Enter Caregiver Portal
-                </button>
-            </form>
-
-            <!-- 7. ADMIN SIGN IN FORM -->
-            <form id="formAdminSignIn" onsubmit="handleAdminSignIn(event)" style="display:none;">
-                <div class="form-group">
-                    <label for="adminUsername">Username:</label>
-                    <input type="text" id="adminUsername" value="admin" required>
-                </div>
-                <div class="form-group">
-                    <label for="adminPassword">Password:</label>
-                    <input type="password" id="adminPassword" value="admin" required>
-                    <div class="form-help">Default demo credentials: <strong>admin</strong> / <strong>admin</strong></div>
-                </div>
-                <button type="submit" class="btn" style="width:100%; padding:9px; font-weight:bold;">
-                    Sign In as Administrator
+                    Sign Up & Enter Caregiver Portal
                 </button>
             </form>
         </div>
@@ -689,7 +655,7 @@
         <div class="navbar-controls">
             <!-- Elder view controls -->
             <div id="elderNavControls" style="display:none; align-items:center; gap:8px;">
-                <label for="navElderSelect" style="font-size:12px; color:#ddd;">Elder:</label>
+                <label id="navElderSelectLabel" for="navElderSelect" style="font-size:12px; color:#ddd;">Elder:</label>
                 <select id="navElderSelect" onchange="switchElder(this.value)"></select>
                 <button class="btn-sos" onclick="openModal('sosModal')">EMERGENCY SOS</button>
             </div>
@@ -1599,59 +1565,119 @@
         }
 
         function renderAuthForms() {
-            const forms = [
-                'formElderSignIn', 'formElderSignUp',
-                'formDoctorSignIn', 'formDoctorSignUp',
-                'formCaregiverSignIn', 'formCaregiverSignUp',
-                'formAdminSignIn'
-            ];
-            forms.forEach(id => {
+            const signupForms = ['formElderSignUp', 'formDoctorSignUp', 'formCaregiverSignUp'];
+            signupForms.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.style.display = 'none';
             });
-
+            document.getElementById('formSignIn').style.display = 'none';
             document.getElementById('loginAlert').style.display = 'none';
 
-            if (currentRole === 'elder') {
-                document.getElementById(currentAuthMode === 'signin' ? 'formElderSignIn' : 'formElderSignUp').style.display = 'block';
-            } else if (currentRole === 'doctor') {
-                document.getElementById(currentAuthMode === 'signin' ? 'formDoctorSignIn' : 'formDoctorSignUp').style.display = 'block';
-            } else if (currentRole === 'caregiver') {
-                document.getElementById(currentAuthMode === 'signin' ? 'formCaregiverSignIn' : 'formCaregiverSignUp').style.display = 'block';
-            } else if (currentRole === 'admin') {
-                document.getElementById('formAdminSignIn').style.display = 'block';
+            const userLabel = document.getElementById('signInUserLabel');
+            const userInput = document.getElementById('loginUsername');
+            const passInput = document.getElementById('loginPassword');
+            const helpText = document.getElementById('signInHelpText');
+            const submitBtn = document.getElementById('signInSubmitBtn');
+
+            if (currentAuthMode === 'signin') {
+                document.getElementById('formSignIn').style.display = 'block';
+
+                if (currentRole === 'elder') {
+                    userLabel.innerText = 'Elder Username (Full Name or Phone):';
+                    userInput.placeholder = 'e.g. John Smith or 10-digit mobile';
+                    helpText.innerHTML = 'Default password for existing demo accounts: <strong>1234</strong>';
+                    submitBtn.innerText = 'Sign In to Elder Dashboard';
+                    submitBtn.className = 'btn btn-success';
+                    submitBtn.style.background = '';
+                } else if (currentRole === 'doctor') {
+                    userLabel.innerText = 'Doctor Username (Full Name or Phone):';
+                    userInput.placeholder = 'e.g. Dr. James Anderson or 10-digit mobile';
+                    helpText.innerHTML = 'Default password for existing demo accounts: <strong>1234</strong>';
+                    submitBtn.innerText = 'Sign In to Doctor Clinical Portal';
+                    submitBtn.className = 'btn';
+                    submitBtn.style.background = '#0969da';
+                } else if (currentRole === 'caregiver') {
+                    userLabel.innerText = 'Caregiver Username (Full Name or Phone):';
+                    userInput.placeholder = 'e.g. Sarah Wilson or 10-digit mobile';
+                    helpText.innerHTML = 'Default password for existing demo accounts: <strong>1234</strong>';
+                    submitBtn.innerText = 'Sign In to Caregiver Portal';
+                    submitBtn.className = 'btn';
+                    submitBtn.style.background = '#8250df';
+                } else if (currentRole === 'admin') {
+                    userLabel.innerText = 'Administrator Username:';
+                    userInput.placeholder = 'admin';
+                    userInput.value = 'admin';
+                    passInput.value = 'admin';
+                    helpText.innerHTML = 'Default credentials: <strong>admin</strong> / <strong>admin</strong>';
+                    submitBtn.innerText = 'Sign In as Administrator';
+                    submitBtn.className = 'btn';
+                    submitBtn.style.background = '#1e3a5f';
+                }
+            } else {
+                if (currentRole === 'elder') {
+                    document.getElementById('formElderSignUp').style.display = 'block';
+                } else if (currentRole === 'doctor') {
+                    document.getElementById('formDoctorSignUp').style.display = 'block';
+                } else if (currentRole === 'caregiver') {
+                    document.getElementById('formCaregiverSignUp').style.display = 'block';
+                }
             }
         }
 
         // --- Sign In / Sign Up Handlers ---
-        function handleElderSignIn(e) {
+        async function handleSignIn(e) {
             e.preventDefault();
-            const id = parseInt(document.getElementById('loginElderSelect').value);
-            const pin = document.getElementById('elderPin').value.trim();
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
             const alertBox = document.getElementById('loginAlert');
+            alertBox.style.display = 'none';
 
-            if (!id) {
-                alertBox.innerText = 'Please select an elder profile.';
-                alertBox.style.display = 'block';
-                return;
-            }
-            if (pin !== '1234') {
-                alertBox.innerText = 'Invalid PIN. (Default demo PIN is 1234)';
+            if (!username || !password) {
+                alertBox.innerText = 'Please enter both username and password.';
                 alertBox.style.display = 'block';
                 return;
             }
 
-            const elder = allEldersList.find(e => e.id === id);
-            currentUser = { role: 'ELDER', id: id, name: elder ? elder.name : 'Elder' };
-            currentElderId = id;
-            sessionStorage.setItem('eldercare_user', JSON.stringify(currentUser));
-            showElderView();
+            try {
+                const res = await fetch(`${API_BASE}/api/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        role: currentRole.toUpperCase(),
+                        username: username,
+                        password: password
+                    })
+                });
+
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    currentUser = {
+                        role: data.role,
+                        id: data.id,
+                        name: data.name,
+                        details: data.details
+                    };
+                    if (data.role === 'ELDER') {
+                        currentElderId = data.id;
+                    }
+                    sessionStorage.setItem('eldercare_user', JSON.stringify(currentUser));
+                    routeToPortal(currentUser);
+                } else {
+                    alertBox.innerText = data.error || 'Invalid credentials. Please verify your username and password.';
+                    alertBox.style.display = 'block';
+                }
+            } catch (err) {
+                console.error('Sign in error:', err);
+                alertBox.innerText = 'Could not connect to server. Please ensure backend is running.';
+                alertBox.style.display = 'block';
+            }
         }
 
         async function handleElderSignUp(e) {
             e.preventDefault();
             const payload = {
                 name: document.getElementById('suElderName').value.trim(),
+                password: document.getElementById('suElderPassword').value.trim(),
                 age: document.getElementById('suElderAge').value,
                 gender: document.getElementById('suElderGender').value,
                 bloodGroup: document.getElementById('suElderBlood').value,
@@ -1660,119 +1686,87 @@
                 medicalConditions: document.getElementById('suElderConditions').value.trim()
             };
 
-            const res = await fetch(`${API_BASE}/api/elders`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
+            try {
+                const res = await fetch(`${API_BASE}/api/elders`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
 
-            if (res.ok) {
-                const data = await res.json();
-                await loadEldersList();
-                currentUser = { role: 'ELDER', id: data.id, name: payload.name };
-                currentElderId = data.id;
-                sessionStorage.setItem('eldercare_user', JSON.stringify(currentUser));
-                showElderView();
-            } else {
-                alert('Failed to register elder profile.');
+                if (res.ok) {
+                    const data = await res.json();
+                    await loadEldersList();
+                    currentUser = { role: 'ELDER', id: data.id, name: payload.name };
+                    currentElderId = data.id;
+                    sessionStorage.setItem('eldercare_user', JSON.stringify(currentUser));
+                    showElderView();
+                } else {
+                    alert('Failed to register elder profile. Phone number may already be in use.');
+                }
+            } catch (err) {
+                alert('Connection error during elder registration.');
             }
-        }
-
-        function handleDoctorSignIn(e) {
-            e.preventDefault();
-            const id = parseInt(document.getElementById('loginDoctorSelect').value);
-            const alertBox = document.getElementById('loginAlert');
-            if (!id) {
-                alertBox.innerText = 'Please select a doctor profile.';
-                alertBox.style.display = 'block';
-                return;
-            }
-            const doctor = allDoctorsList.find(d => d.id === id);
-            currentUser = { role: 'DOCTOR', id: id, name: doctor ? doctor.name : 'Doctor', details: doctor };
-            sessionStorage.setItem('eldercare_user', JSON.stringify(currentUser));
-            showDoctorView();
         }
 
         async function handleDoctorSignUp(e) {
             e.preventDefault();
             const payload = {
                 name: document.getElementById('suDocName').value.trim(),
+                password: document.getElementById('suDocPassword').value.trim(),
                 specialization: document.getElementById('suDocSpec').value.trim(),
                 hospital: document.getElementById('suDocHosp').value.trim(),
                 phone: document.getElementById('suDocPhone').value.trim()
             };
 
-            const res = await fetch(`${API_BASE}/api/doctors`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
+            try {
+                const res = await fetch(`${API_BASE}/api/doctors`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
 
-            if (res.ok) {
-                const data = await res.json();
-                await loadDoctorsList();
-                currentUser = { role: 'DOCTOR', id: data.id, name: payload.name, details: { ...payload, id: data.id } };
-                sessionStorage.setItem('eldercare_user', JSON.stringify(currentUser));
-                showDoctorView();
-            } else {
-                alert('Failed to register doctor profile.');
+                if (res.ok) {
+                    const data = await res.json();
+                    await loadDoctorsList();
+                    currentUser = { role: 'DOCTOR', id: data.id, name: payload.name, details: { ...payload, id: data.id } };
+                    sessionStorage.setItem('eldercare_user', JSON.stringify(currentUser));
+                    showDoctorView();
+                } else {
+                    alert('Failed to register doctor profile.');
+                }
+            } catch (err) {
+                alert('Connection error during doctor registration.');
             }
-        }
-
-        function handleCaregiverSignIn(e) {
-            e.preventDefault();
-            const id = parseInt(document.getElementById('loginCaregiverSelect').value);
-            const alertBox = document.getElementById('loginAlert');
-            if (!id) {
-                alertBox.innerText = 'Please select a caregiver profile.';
-                alertBox.style.display = 'block';
-                return;
-            }
-            const caregiver = allCaregiversList.find(c => c.id === id);
-            currentUser = { role: 'CAREGIVER', id: id, name: caregiver ? caregiver.name : 'Caregiver', details: caregiver };
-            sessionStorage.setItem('eldercare_user', JSON.stringify(currentUser));
-            showCaregiverView();
         }
 
         async function handleCaregiverSignUp(e) {
             e.preventDefault();
             const payload = {
                 name: document.getElementById('suCareName').value.trim(),
+                password: document.getElementById('suCarePassword').value.trim(),
                 phone: document.getElementById('suCarePhone').value.trim(),
                 address: document.getElementById('suCareAddress').value.trim(),
                 relationship: document.getElementById('suCareRel').value.trim()
             };
 
-            const res = await fetch(`${API_BASE}/api/caregivers`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
+            try {
+                const res = await fetch(`${API_BASE}/api/caregivers`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
 
-            if (res.ok) {
-                const data = await res.json();
-                await loadCaregiversList();
-                currentUser = { role: 'CAREGIVER', id: data.id, name: payload.name, details: { ...payload, id: data.id } };
-                sessionStorage.setItem('eldercare_user', JSON.stringify(currentUser));
-                showCaregiverView();
-            } else {
-                alert('Failed to register caregiver profile.');
-            }
-        }
-
-        function handleAdminSignIn(e) {
-            e.preventDefault();
-            const user = document.getElementById('adminUsername').value.trim();
-            const pass = document.getElementById('adminPassword').value.trim();
-            const alertBox = document.getElementById('loginAlert');
-
-            if (user === 'admin' && (pass === 'admin' || pass === 'admin123')) {
-                currentUser = { role: 'ADMIN', name: 'Administrator' };
-                sessionStorage.setItem('eldercare_user', JSON.stringify(currentUser));
-                showAdminView();
-            } else {
-                alertBox.innerText = 'Invalid administrator credentials. (Default: admin / admin)';
-                alertBox.style.display = 'block';
+                if (res.ok) {
+                    const data = await res.json();
+                    await loadCaregiversList();
+                    currentUser = { role: 'CAREGIVER', id: data.id, name: payload.name, details: { ...payload, id: data.id } };
+                    sessionStorage.setItem('eldercare_user', JSON.stringify(currentUser));
+                    showCaregiverView();
+                } else {
+                    alert('Failed to register caregiver profile.');
+                }
+            } catch (err) {
+                alert('Connection error during caregiver registration.');
             }
         }
 
@@ -1791,6 +1785,7 @@
             document.getElementById('viewDoctor').style.display = 'none';
             document.getElementById('viewElder').style.display = 'none';
             document.getElementById('viewAdmin').style.display = 'none';
+            renderAuthForms();
         }
 
         function logout() {
@@ -1860,8 +1855,19 @@
             document.getElementById('navUserLabel').innerText = currentUser.name;
 
             document.getElementById('elderNavControls').style.display = 'flex';
-            document.getElementById('navElderSelect').value = currentElderId;
             document.getElementById('btnSwitchToAdmin').style.display = (currentUser.role === 'ADMIN') ? 'inline-block' : 'none';
+
+            // Hide the elder switcher dropdown for ELDER role so they only see their own profile
+            const elderSel = document.getElementById('navElderSelect');
+            const elderSelLabel = document.getElementById('navElderSelectLabel');
+            if (currentUser.role === 'ELDER') {
+                elderSel.style.display = 'none';
+                if (elderSelLabel) elderSelLabel.style.display = 'none';
+            } else {
+                elderSel.style.display = 'inline-block';
+                if (elderSelLabel) elderSelLabel.style.display = 'inline-block';
+                elderSel.value = currentElderId;
+            }
 
             loadElderDashboard(currentElderId);
         }
@@ -1891,7 +1897,7 @@
                 const res = await fetch(`${API_BASE}/api/elders`);
                 allEldersList = await res.json();
 
-                const selects = ['loginElderSelect', 'navElderSelect', 'cgElderSelect', 'docElderSelect'];
+                const selects = ['navElderSelect', 'cgElderSelect', 'docElderSelect'];
                 selects.forEach(sId => {
                     const sel = document.getElementById(sId);
                     if (!sel) return;
@@ -1917,7 +1923,7 @@
                 const res = await fetch(`${API_BASE}/api/doctors`);
                 allDoctorsList = await res.json();
 
-                const selects = ['loginDoctorSelect', 'apptDoctor'];
+                const selects = ['apptDoctor'];
                 selects.forEach(sId => {
                     const sel = document.getElementById(sId);
                     if (!sel) return;
@@ -1942,20 +1948,6 @@
             try {
                 const res = await fetch(`${API_BASE}/api/caregivers`);
                 allCaregiversList = await res.json();
-
-                const sel = document.getElementById('loginCaregiverSelect');
-                if (!sel) return;
-                sel.innerHTML = '';
-                if (allCaregiversList.length === 0) {
-                    sel.innerHTML = '<option value="">No caregivers registered</option>';
-                } else {
-                    allCaregiversList.forEach(c => {
-                        const opt = document.createElement('option');
-                        opt.value = c.id;
-                        opt.textContent = `${c.name} (${c.relationship})`;
-                        sel.appendChild(opt);
-                    });
-                }
             } catch (err) {
                 console.error('Failed to load caregivers:', err);
             }

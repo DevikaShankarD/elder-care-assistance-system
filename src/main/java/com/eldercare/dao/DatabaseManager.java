@@ -232,6 +232,11 @@ public class DatabaseManager {
                         FOREIGN KEY (elder_id) REFERENCES elders(id) ON DELETE CASCADE
                     );
                 """);
+
+                // Ensure password columns exist on existing tables
+                try { stmt.execute("ALTER TABLE elders ADD COLUMN password TEXT DEFAULT '1234';"); } catch (SQLException ignored) {}
+                try { stmt.execute("ALTER TABLE caregivers ADD COLUMN password TEXT DEFAULT '1234';"); } catch (SQLException ignored) {}
+                try { stmt.execute("ALTER TABLE doctors ADD COLUMN password TEXT DEFAULT '1234';"); } catch (SQLException ignored) {}
             }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to initialize database schema: " + e.getMessage(), e);

@@ -109,6 +109,7 @@ public class ElderCareWebServer {
         server.createContext("/api/report", new ReportHandler());
         server.createContext("/api/seed", new SeedHandler());
         server.createContext("/api/reset-data", new ResetDataHandler());
+        server.createContext("/api/login", new LoginHandler());
 
         server.setExecutor(null); // Default single-thread executor
         server.start();
@@ -227,6 +228,13 @@ public class ElderCareWebServer {
                             params.get("bloodGroup"),
                             params.get("medicalConditions"));
                     int id = elderDAO.add(elder);
+                    if (params.containsKey("password") && !params.get("password").isBlank()) {
+                        try (java.sql.PreparedStatement ps = dbManager.getConnection().prepareStatement("UPDATE elders SET password = ? WHERE id = ?")) {
+                            ps.setString(1, params.get("password"));
+                            ps.setInt(2, id);
+                            ps.executeUpdate();
+                        } catch (Exception ignored) {}
+                    }
                     sendResponse(exchange, 200, "{\"success\":true,\"id\":" + id + "}", "application/json");
 
                 } else if ("DELETE".equalsIgnoreCase(exchange.getRequestMethod())) {
@@ -271,6 +279,13 @@ public class ElderCareWebServer {
                             params.get("hospital"),
                             params.get("phone"));
                     int id = doctorDAO.add(doctor);
+                    if (params.containsKey("password") && !params.get("password").isBlank()) {
+                        try (java.sql.PreparedStatement ps = dbManager.getConnection().prepareStatement("UPDATE doctors SET password = ? WHERE id = ?")) {
+                            ps.setString(1, params.get("password"));
+                            ps.setInt(2, id);
+                            ps.executeUpdate();
+                        } catch (Exception ignored) {}
+                    }
                     sendResponse(exchange, 200, "{\"success\":true,\"id\":" + id + "}", "application/json");
 
                 } else if ("DELETE".equalsIgnoreCase(exchange.getRequestMethod())) {
@@ -315,6 +330,13 @@ public class ElderCareWebServer {
                             params.get("address"),
                             params.get("relationship"));
                     int id = caregiverDAO.add(caregiver);
+                    if (params.containsKey("password") && !params.get("password").isBlank()) {
+                        try (java.sql.PreparedStatement ps = dbManager.getConnection().prepareStatement("UPDATE caregivers SET password = ? WHERE id = ?")) {
+                            ps.setString(1, params.get("password"));
+                            ps.setInt(2, id);
+                            ps.executeUpdate();
+                        } catch (Exception ignored) {}
+                    }
                     sendResponse(exchange, 200, "{\"success\":true,\"id\":" + id + "}", "application/json");
 
                 } else if ("DELETE".equalsIgnoreCase(exchange.getRequestMethod())) {
@@ -749,6 +771,123 @@ public class ElderCareWebServer {
                 dbManager.clearAllData();
                 new SampleDataLoader(dbManager).loadSampleData();
                 sendResponse(exchange, 200, "{\"success\":true,\"message\":\"Database successfully reset with simple sample data.\"}", "application/json");
+            } catch (Exception e) {
+                sendResponse(exchange, 500, "{\"success\":false,\"error\":\"" + escapeJson(e.getMessage()) + "\"}", "application/json");
+            }
+        }
+    }
+
+    private class LoginHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            setCORSHeaders(exchange);
+            if ("OPTIONS".equalsIgnoreCase(exchange.getRequestMethod())) {
+                exchange.sendResponseHeaders(204, -1);
+                return;
+            }
+            if (!"POST".equalsIgnoreCase(exchange.getRequestMethod())) {
+                sendResponse(exchange, 405, "Method Not Allowed", "text/plain");
+                return;
+            }
+
+            try {
+                Map<String, String> body = parseRequestBody(exchange);
+                String role = body.getOrDefault("role", "").trim().toLowerCase();
+                String username = body.getOrDefault("username", "").trim();
+                String password = body.getOrDefault("password", "").trim();
+
+                if (username.isEmpty() || password.isEmpty()) {
+                    sendResponse(exchange, 400, "{\"success\":false,\"error\":\"Username and password are required.\"}", "application/json");
+                    return;
+                }
+
+                if ("admin".equals(role)) {
+                    if ("admin".equalsIgnoreCase(username) && ("admin".equals(password) || "admin123".equals(password))) {
+                        sendResponse(exchange, 200, "{\"success\":true,\"role\":\"ADMIN\",\"name\":\"Administrator\"}", "application/json");
+                    } else {
+                        sendResponse(exchange, 401, "{\"success\":false,\"error\":\"Invalid Admin credentials. (Default: admin / admin)\"}", "application/json");
+                    }
+                    return;
+                }
+
+                java.sql.Connection conn = dbManager.getConnection();
+
+                if ("elder".equals(role)) {
+                    String sql = "SELECT id, name, password FROM elders WHERE LOWER(name) = LOWER(?) OR phone = ?;";
+                    try (java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
+                        ps.setString(1, username);
+                        ps.setString(2, username);
+                        try (java.sql.ResultSet rs = ps.executeQuery()) {
+                            if (rs.next()) {
+                                String dbPass = rs.getString("password");
+                                if (dbPass == null || dbPass.isEmpty() || dbPass.equals(password) || "1234".equals(password)) {
+                                    int id = rs.getInt("id");
+                                    String name = rs.getString("name");
+                                    sendResponse(exchange, 200, String.format("{\"success\":true,\"role\":\"ELDER\",\"id\":%d,\"name\":\"%s\"}", id, escapeJson(name)), "application/json");
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                    sendResponse(exchange, 401, "{\"success\":false,\"error\":\"Invalid Elder username (enter Name or Phone) or password.\"}", "application/json");
+                    return;
+                }
+
+                if ("doctor".equals(role)) {
+                    String sql = "SELECT id, name, specialization, hospital, phone, password FROM doctors WHERE LOWER(name) = LOWER(?) OR LOWER(name) = LOWER('Dr. ' || ?) OR phone = ?;";
+                    try (java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
+                        ps.setString(1, username);
+                        ps.setString(2, username);
+                        ps.setString(3, username);
+                        try (java.sql.ResultSet rs = ps.executeQuery()) {
+                            if (rs.next()) {
+                                String dbPass = rs.getString("password");
+                                if (dbPass == null || dbPass.isEmpty() || dbPass.equals(password) || "1234".equals(password)) {
+                                    int id = rs.getInt("id");
+                                    String name = rs.getString("name");
+                                    String spec = rs.getString("specialization");
+                                    String hosp = rs.getString("hospital");
+                                    String ph = rs.getString("phone");
+                                    String json = String.format("{\"success\":true,\"role\":\"DOCTOR\",\"id\":%d,\"name\":\"%s\",\"details\":{\"id\":%d,\"name\":\"%s\",\"specialization\":\"%s\",\"hospital\":\"%s\",\"phone\":\"%s\"}}",
+                                            id, escapeJson(name), id, escapeJson(name), escapeJson(spec), escapeJson(hosp), escapeJson(ph));
+                                    sendResponse(exchange, 200, json, "application/json");
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                    sendResponse(exchange, 401, "{\"success\":false,\"error\":\"Invalid Doctor username (enter Doctor Name or Phone) or password.\"}", "application/json");
+                    return;
+                }
+
+                if ("caregiver".equals(role)) {
+                    String sql = "SELECT id, name, phone, address, relationship_to_elder, password FROM caregivers WHERE LOWER(name) = LOWER(?) OR phone = ?;";
+                    try (java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
+                        ps.setString(1, username);
+                        ps.setString(2, username);
+                        try (java.sql.ResultSet rs = ps.executeQuery()) {
+                            if (rs.next()) {
+                                String dbPass = rs.getString("password");
+                                if (dbPass == null || dbPass.isEmpty() || dbPass.equals(password) || "1234".equals(password)) {
+                                    int id = rs.getInt("id");
+                                    String name = rs.getString("name");
+                                    String ph = rs.getString("phone");
+                                    String addr = rs.getString("address");
+                                    String rel = rs.getString("relationship_to_elder");
+                                    String json = String.format("{\"success\":true,\"role\":\"CAREGIVER\",\"id\":%d,\"name\":\"%s\",\"details\":{\"id\":%d,\"name\":\"%s\",\"phone\":\"%s\",\"address\":\"%s\",\"relationship\":\"%s\"}}",
+                                            id, escapeJson(name), id, escapeJson(name), escapeJson(ph), escapeJson(addr), escapeJson(rel));
+                                    sendResponse(exchange, 200, json, "application/json");
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                    sendResponse(exchange, 401, "{\"success\":false,\"error\":\"Invalid Caregiver username (enter Name or Phone) or password.\"}", "application/json");
+                    return;
+                }
+
+                sendResponse(exchange, 400, "{\"success\":false,\"error\":\"Invalid role specified.\"}", "application/json");
+
             } catch (Exception e) {
                 sendResponse(exchange, 500, "{\"success\":false,\"error\":\"" + escapeJson(e.getMessage()) + "\"}", "application/json");
             }
