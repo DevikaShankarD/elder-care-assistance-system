@@ -524,7 +524,7 @@
                 <div class="form-group">
                     <label for="loginPassword">Password:</label>
                     <input type="password" id="loginPassword" placeholder="Enter password" required>
-                    <div id="signInHelpText" class="form-help">Existing accounts default password: <strong>1234</strong></div>
+                    <div id="signInHelpText" class="form-help"></div>
                 </div>
                 <button id="signInSubmitBtn" type="submit" class="btn btn-success" style="width:100%; padding:9px; font-weight:bold;">
                     Sign In to Elder Dashboard
@@ -1253,16 +1253,6 @@
                 </tbody>
             </table>
         </div>
-
-        <div class="card" style="background:#fffdfa; border-color:#fae2c2;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                    <strong style="color:#b05a00;">System Sample Data Maintenance:</strong>
-                    <span style="font-size:13px; color:#666; margin-left:8px;">Reset database to clean standard student demo records (John Smith, Mary Davis, doctors).</span>
-                </div>
-                <button class="btn btn-secondary btn-sm" onclick="resetSampleData()">Reset Sample Data</button>
-            </div>
-        </div>
     </div>
 
     <!-- ========================================================================= -->
@@ -1584,31 +1574,29 @@
 
                 if (currentRole === 'elder') {
                     userLabel.innerText = 'Elder Username (Full Name or Phone):';
-                    userInput.placeholder = 'e.g. John Smith or 10-digit mobile';
-                    helpText.innerHTML = 'Default password for existing demo accounts: <strong>1234</strong>';
+                    userInput.placeholder = 'Enter your name or 10-digit mobile';
+                    helpText.innerHTML = '';
                     submitBtn.innerText = 'Sign In to Elder Dashboard';
                     submitBtn.className = 'btn btn-success';
                     submitBtn.style.background = '';
                 } else if (currentRole === 'doctor') {
                     userLabel.innerText = 'Doctor Username (Full Name or Phone):';
-                    userInput.placeholder = 'e.g. Dr. James Anderson or 10-digit mobile';
-                    helpText.innerHTML = 'Default password for existing demo accounts: <strong>1234</strong>';
+                    userInput.placeholder = 'Enter your name or 10-digit mobile';
+                    helpText.innerHTML = '';
                     submitBtn.innerText = 'Sign In to Doctor Clinical Portal';
                     submitBtn.className = 'btn';
                     submitBtn.style.background = '#0969da';
                 } else if (currentRole === 'caregiver') {
                     userLabel.innerText = 'Caregiver Username (Full Name or Phone):';
-                    userInput.placeholder = 'e.g. Sarah Wilson or 10-digit mobile';
-                    helpText.innerHTML = 'Default password for existing demo accounts: <strong>1234</strong>';
+                    userInput.placeholder = 'Enter your name or 10-digit mobile';
+                    helpText.innerHTML = '';
                     submitBtn.innerText = 'Sign In to Caregiver Portal';
                     submitBtn.className = 'btn';
                     submitBtn.style.background = '#8250df';
                 } else if (currentRole === 'admin') {
                     userLabel.innerText = 'Administrator Username:';
-                    userInput.placeholder = 'admin';
-                    userInput.value = 'admin';
-                    passInput.value = 'admin';
-                    helpText.innerHTML = 'Default credentials: <strong>admin</strong> / <strong>admin</strong>';
+                    userInput.placeholder = 'Enter admin username';
+                    helpText.innerHTML = '';
                     submitBtn.innerText = 'Sign In as Administrator';
                     submitBtn.className = 'btn';
                     submitBtn.style.background = '#1e3a5f';

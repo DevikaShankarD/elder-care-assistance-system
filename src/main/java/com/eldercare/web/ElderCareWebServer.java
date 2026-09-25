@@ -81,16 +81,6 @@ public class ElderCareWebServer {
      * @throws IOException on network binding error
      */
     public void start() throws IOException {
-        // Auto-seed sample data on first run if database is empty
-        if (dbManager.isDatabaseEmpty()) {
-            try {
-                new SampleDataLoader(dbManager).loadSampleData();
-                System.out.println("[Web Server] Database was empty. Auto-seeded initial sample data.");
-            } catch (SQLException e) {
-                System.err.println("[Web Server] Failed to auto-seed: " + e.getMessage());
-            }
-        }
-
         server = HttpServer.create(new InetSocketAddress(port), 0);
 
         // Static files (Web Dashboard)
